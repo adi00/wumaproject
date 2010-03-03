@@ -1,0 +1,18 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+test machine: 10.5.57.226
+mysql:  default
+website: /home/koubei/sites/phpwind
+database:phpwind
+
+table: pw_teamprojects, pw_teamtasks
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages

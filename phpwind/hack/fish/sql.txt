@@ -1,0 +1,41 @@
+CREATE TABLE pw_fish (
+  uid int(10) unsigned NOT NULL,
+  username varchar(50) NOT NULL,
+  fish1 int(10) unsigned NOT NULL,
+  fish2 int(10) unsigned NOT NULL,
+  fish3 int(10) unsigned NOT NULL,
+  fish4 int(10) unsigned NOT NULL,
+  fish5 int(10) unsigned NOT NULL,
+  fish6 int(10) unsigned NOT NULL,
+  fish7 int(10) unsigned NOT NULL,
+  fish8 int(10) unsigned NOT NULL,
+  fish9 int(10) unsigned NOT NULL,
+  fish10 int(10) unsigned NOT NULL,
+  fish11 int(10) unsigned NOT NULL,
+  fish12 int(10) unsigned NOT NULL,
+  fish13 int(10) unsigned NOT NULL,
+  fish14 int(10) unsigned NOT NULL,
+  statistics int(10) unsigned NOT NULL,
+  `lock` int(1) NOT NULL,
+  `time` int(10) NOT NULL
+) ENGINE=MyISAM;
+
+
+CREATE TABLE pw_fishlog (
+  fish1 int(10) unsigned NOT NULL,
+  fish2 int(10) unsigned NOT NULL,
+  fish3 int(10) unsigned NOT NULL,
+  fish4 int(10) unsigned NOT NULL,
+  fish5 int(10) unsigned NOT NULL,
+  fish6 int(10) unsigned NOT NULL,
+  fish7 int(10) unsigned NOT NULL,
+  fish8 int(10) unsigned NOT NULL,
+  fish9 int(10) unsigned NOT NULL,
+  fish10 int(10) unsigned NOT NULL,
+  fish11 int(10) unsigned NOT NULL,
+  fish12 int(10) unsigned NOT NULL,
+  fish13 int(10) unsigned NOT NULL,
+  fish14 int(10) unsigned NOT NULL
+) ENGINE=MyISAM;
+
+INSERT INTO pw_fishlog (fish1, fish2, fish3, fish4, fish5, fish6, fish7, fish8) VALUES (0, 0, 0, 0, 0, 0, 0, 0);

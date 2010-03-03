@@ -1,0 +1,26 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">淘金设置</a></li>
+</ul><div class="c"></div>
+<h3>提示信息</h3>
+<div class="tr5">淘金设置：可开启关闭淘金功能，以及设置淘金基本参数</div>
+<form action="$basename" method="post">
+<input type="hidden" name="pkaction" value="管理员暗号" />
+<h2>淘金参数设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="40%">是否开放PK插件<br />（需要到插件中心 管理中同时启用该插件方为有效）</td>
+<td><input type="radio" value="1"  name="pkopen" $pkcheck_1 /> 是 <input type="radio" value="0"  name="pkopen" $pkcheck_0 /> 否</td></tr>
+<tr class="tr3"><td>设置你的自定义积分cid</td>
+<td><input size="35" class="input" value="$goldcid"  name="goldcid"/></td></tr>
+<tr valign="left">
+<td>&nbsp;</td><td><input type="submit" value="提交"/><input type="reset" /></td>
+</tr>
+</table>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,26 @@
+
+CREATE TABLE IF NOT EXISTS `pw_gold` (
+  `id` mediumint(20) NOT NULL,
+  `name` char(20) NOT NULL,
+  `foodname` char(40) NOT NULL,
+  `health` int(11) NOT NULL default '0',
+  `toolname` char(40) NOT NULL,
+  `tool` int(11) NOT NULL default '0',
+  `score` bigint(20) NOT NULL default '0',
+  `allscore` bigint(20) NOT NULL default '0',
+  `money` bigint(20) NOT NULL default '0',
+  `addtime` int(11) NOT NULL default '0',
+  `addspeed` int(11) NOT NULL default '0',
+  `msg` char(100) NOT NULL,
+  `time` bigint(20) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+
+CREATE TABLE IF NOT EXISTS `pw_goldadmin` (
+  `id` smallint(6) NOT NULL default '0',  
+  `oc` smallint(6) NOT NULL default '0',
+  `goldcid` smallint(6) NOT NULL default '0'
+) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+
+INSERT INTO `pw_goldadmin` (`id`, `oc`, `goldcid`) VALUES
+(0, 0, 1);

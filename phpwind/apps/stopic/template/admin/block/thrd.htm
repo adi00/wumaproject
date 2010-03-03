@@ -1,0 +1,65 @@
+<!--
+<?php
+
+if ('show' == $block_job) {
+	foreach ($block_data as $v) {
+print <<<EOT
+-->
+
+<ul>
+<li><a href="{$v[url]}" target="_blank">{$v[title]}</a></li>
+</ul>
+
+<!--
+EOT;
+	}
+} else {
+print <<<EOT
+-->
+
+<tbody id="fildbody">
+	<tr>
+		<td colspan="3">
+			<div class="fr">
+				帖子tid：<input type="text" id="tid" size="10" class="input">（选填）
+				<input type="button" class="btn" value="添加帖子" onclick="javascript:New(addFildData,['fildbody','filddata','tid']);">
+			</div>
+			模块标题：<input type="text" name="block_title" value="$block[title]" class="input">
+		</td>
+	</tr>
+	<tr>
+		<td>链接地址</td>
+		<td>标题</td>
+		<td>&nbsp;</td>
+	</tr>
+	
+<!--
+EOT;
+	foreach ($block_data as $v) {
+print <<<EOT
+-->
+	<tr>
+		<td><input type="text" size="26" name="url[]" class="input" value="{$v[url]}"></td>
+		<td><input type="text" size="26" name="title[]" class="input" value="{$v[title]}"></td>
+		<td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+	</tr>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+	
+</tbody>
+<tbody id="filddata" style="display:none;">
+	<tr>
+		<td><input type="text" size="26" name="url[]" value="" class="input"></td>
+		<td><input type="text" size="26" name="title[]" value="" class="input"></td>
+		<td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+	</tr>
+</tbody>
+
+<!--
+EOT;
+}
+?>
+-->

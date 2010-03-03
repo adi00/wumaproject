@@ -1,0 +1,392 @@
+<!--
+<?php 
+
+print <<<EOT
+-->
+<style type="text/css">
+.layoutDraggable {background:#fff; cursor:move;border-top:1px dashed #ffc495;padding-top:5px;margin-bottom:10px;}
+.itemDroppable {padding:10px 0 10px;background:#ffecdc;border:1px solid #ffc495;margin:5px 0 0;cursor:default;}
+
+.itemDraggable {margin-bottom:10px;background:#ffffff;overflow:hidden;border:1px solid #6392c5; cursor:default;}
+.itemDraggable .itemHeader{line-height: 28px;background-color: #b5d1f1;border-bottom:1px solid #6392c5;color:#333;padding:0 10px;cursor: move;font-weight: bold;font-size: 16px;height: 28px;position: relative;}
+.itemDraggable .itemHeader .closeEl{position: absolute;right: 5px;top: 0px;font-weight: normal;font-size: 12px;text-decoration: none;}
+.itemDraggable .itemHeader .editEl{position: absolute;right: 28px;top: 0px;font-weight: normal;font-size: 12px;text-decoration: none;}
+
+.widget-top {cursor: move;border:1px solid #adcaea;padding:2px 10px;float:left;background:#ffffff;}
+.widget-top-bg{width:962px;margin:30px auto 5px;}
+
+.sortHelper{border:2px dashed #ffc495;width: auto !important;background:#ffecdc;}
+
+.pwSlide{margin:6px 0;}
+
+.itemContent{padding:4px 10px;}
+.itemContent li{line-height:24px;border-bottom:0;}
+.itemContent h2{ font-size:14px; font-weight:700; text-align:center;margin:0;margin-top:4px;height:21px;overflow:hidden;line-height:21px;background:none;padding:0;}
+.itemContent p{margin:5px 0;text-indent:2em;}
+.itemContent tr td,.itemContent tr th{padding:4px 0 10px;}
+.itemContent th{vertical-align:top;}
+.itemContent th img{margin-top:2px;}
+.itemContent td h4{margin-left:10px; font-size:16px;}
+.itemContent td p{ text-align:left; text-indent:2em;margin-left:10px;}
+
+.list-img-a{padding-bottom:10px;}
+.list-img-a li{float:left;margin:6px 10px 5px 0;display:inline;}
+.list-img-a li p{line-height:20px;height:20px;overflow:hidden; text-align:center; text-indent:0;}
+
+.list-img-dl{padding:4px 0;}
+.list-img-dl dl{margin:4px 10px 0 0;}
+.list-img-dl dd{padding-top:5px;}
+
+.h{border-bottom:1px solid #abc8ea;background:#e8f5fb;text-align:left;color:#3366cc;padding:2px .5em 0; line-height:220%;}
+.h span{font-weight:normal;}
+.h h2{font-weight:bold}
+.h a{font-family:Arial;color:#3366cc}
+.h span a,.h span{color:#3366cc;}
+.layoutDragElement {cursor:move;}
+.topics_title{padding:10px 0 0;}
+.topics_title li{float:left;margin-right:20px;font-size:14px;}
+.topics_title li .input{border:1px solid #7f9db9; font:14px/16px Arial;padding:4px 4px 3px;}
+.topics_title li i{ font-style:normal;float:left;line-height:25px;margin-right:10px;}
+.topics_title li span{font-size:12px;}
+.topics_title li select.fl{margin-top:2px;}
+.org{color:#FF6600;}
+
+.topics_tips{border:1px solid #ccc;background:#fff;width:960px;}
+.topics_tips_closeB{width:100px;margin:10px auto -1px;border:1px solid #ccc;border-bottom:none;background:#f7f7f7;cursor:pointer;line-height:18px; text-align:center;}
+
+.banner{ position:relative;border:0;padding:0;margin:0;}
+.banner h1{ position:absolute;}
+.zt_nav li{float:left;line-height:35px; font-size:14px;margin:0 10px; white-space:nowrap;}
+</style>
+
+<form id="opMakeForm" action="$stopic_admin_url" method="post" enctype="multipart/form-data" onsubmit="return checkSubmit();">
+<table width="100%">
+	<tr>
+		<td style="padding-left:10px;">
+<div class="cc">
+<ul class="topics_title cc fl">
+	<li>
+		<i>标题 (<span class="org">限50字节</span>)</i>
+		<input id="stopicId" type="hidden" name="stopic_id" value="$stopic_id" />
+		<input id="stopicTitle" name="stopic_title" maxlength="50" type="text" value="{$stopic_data['title']}" class="input" size="30" onblur="ctrlStopicTitle(false);" onfocus="ctrlStopicTitle(true);" />
+	</li>
+	<li>
+		分类
+		<select name="category_id" id="category" class="f1">
+<!--
+EOT;
+foreach ($category_list as $category) {
+	$selected = $stopic_data['category_id'] == $category['id'] ? 'selected="selected"' : '';
+print <<<EOT
+-->
+				<option value="{$category['id']}" $selected>{$category['title']}</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+		</select>
+        <span id="opCreateCategory">
+            <span id="opCreateCategoryShowLink"><a id="opCreateCategoryLink" href="javascript:void(0);">创建新分类</a></span>
+            <span id="opCreateCategoryShowForm" style="display:none;">
+                <input id="opCreateCategoryFormInput" type="text" size="8" class="input" name="new_category_name" onkeydown="return checkForCategorySubmit(event);">
+                <input id="opCreateCategoryFormSubmit" type="button" value="创建">&nbsp;&nbsp;
+                <span id="opCategoryNameError" style="display:none;"><font id="opCategoryNameErrorMsg" color="red">请填写分类名称</font></span>
+            </span>
+        </span>
+	</li>
+</ul>
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-left:10px;">
+<div class="topics_tips" style="margin-top:3px;">
+<iframe id="advanceIframe" name="advanceIframe" src="$stopic_admin_url&job=advance&stopic_id=$stopic_id" width="100%" height="310" frameborder="0" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+</div>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="p10" style="padding-bottom:0;">
+			<div class="choose" style="-moz-user-select:-moz-none;">
+            	<div class="p10">
+                <p class="pd5">
+                    选用布局 ：
+                </p>
+                <ul class="zt-list cc">
+<!--
+EOT;
+foreach ($layout_list as $layout_name => $layout) {
+print <<<EOT
+-->
+                    <li>
+                        <div class="layoutDragElement" id="$layout_name" style="background:url({$layout['logo']}) no-repeat;width:60px;height:80px;">
+                        	<br><br><br><br><br>{$layout['desc']}
+                        </div>
+                        <font id="{$layout_name}_title" style="display:none;">{$layout['desc']}</font>
+                    </li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+				</ul>
+                </div>
+        	</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:10px;">
+			<div class="choose" style="-moz-user-select:-moz-none;">
+				<div class="p10 cc" style="padding-top:5px;">
+<!--
+EOT;
+foreach ($blocks as $key=>$block) {
+print <<<EOT
+-->
+					<div id="block_{$key}" class="widget-top">$block</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+			</div>
+			<div class="preview cc" style="-moz-user-select:-moz-none;border:1px dashed #eba90b;background:#fffbf0;">
+            	<table width="100%">
+                <tr><td height="200" valign="top";>
+				<div id="container" class="layoutDroppable cc"style="padding:9px;">
+<!--
+EOT;
+if ('' == $tpl_content) {
+print <<<EOT
+-->
+<div id="type1v0_1" class="layoutDraggable cc" style="width: auto; height: auto; z-index: 0; position: static; left: 36px; top: 310px;">
+	<div class="layoutHeader">
+		<span>直列</span>
+		<a class="closeEl" href="javascript:void(0);">[x]</a>
+	</div>
+	<div id="type1v0_1_main" class="itemDroppable">&nbsp;</div>
+</div>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+$tpl_content
+<!--
+EOT;
+}
+print <<<EOT
+-->
+
+				</div>
+                </td></tr>
+                </table>
+			</div>
+		</td>
+	</tr>
+
+	<tr>
+		<td style="padding:10px;">
+			<input type="button" value="生成专题" class="btn" onclick="creatStopic();" />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="预览" class="btn" onclick="previewStopic();return false;" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<script language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/core/core.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script type="text/javascript" language="JavaScript" src="js/color_picker.js"></script>
+<script language="javascript" src="apps/stopic/js/getelementpos.js"></script>
+<script language="javascript" src="apps/stopic/js/drag.js"></script>
+<script language="javascript" src="apps/stopic/js/selectstyle.js"></script>
+
+<script language="javascript">
+
+var AJAXURL = '$ajaxurl';
+var STOPIC_ID = 0;
+
+var dragLayoutImpl = New(externalLayoutDrag,['layoutDroppable','layoutDraggable','layoutHeader','editEl','closeEl','itemContent','preview', ['layoutDraggable', 'itemDraggable']]);
+dragLayoutImpl.externalLayoutDrag('layoutDragElement');
+
+var dragItemImpl = New(externalDrag,['itemDroppable','itemDraggable','itemHeader','editEl','closeEl','itemContent','container', ['layoutDraggable', 'itemDraggable']]);
+dragItemImpl.externalDrag('widget-top');
+
+
+function creatStopic () {
+	var block_config = dragLayoutImpl.getStopicConfig() + dragItemImpl.getStopicConfig();
+	if (!isStopicInit()) return false;
+	var stopic_id = '&stopic_id=' + isStopicInit();
+	var category_id = '&category_id=' + getObj('category').value;
+	var stopic_title = '&stopic_title=' + getObj('stopicTitle').value;
+	ajax.send(AJAXURL,'job=creatstopic' + stopic_id + category_id + stopic_title + block_config,ajax.get);
+}
+function previewStopic () {
+	var block_config = dragLayoutImpl.getStopicConfig() + dragItemImpl.getStopicConfig();
+	if (!isStopicInit()) return false;
+	var stopic_id = '&stopic_id=' + isStopicInit();
+	url = '$basename&job=preview' + stopic_id + block_config;
+	window.open(url,'_blank');
+}
+
+function checkSubmit() {
+	
+}
+
+
+function getRadioValue(radioName){
+	var obj;
+	obj=document.getElementsByName(radioName);
+	if(obj!=null){
+		var i;
+		for(i=0;i<obj.length;i++){
+			if(obj[i].checked){
+				return obj[i].value;
+			}
+		}
+	}
+	return null;
+}
+
+
+window.onload = function() {
+	initStopic();
+};
+
+//create stopic
+function isStopicInit() {
+	return getObj('stopicId').value * 1;
+}
+
+function initStopic() {
+	if (isStopicInit()) {
+		return true;
+	}
+	//if (confirm('你正在创建一个新专题，系统将为你初始化一个“未命名”专题，确定要继续么？否则将跳回管理页')) {
+	
+	var defaultStopicTitle = '（未命名）';
+	var defaultStopicCategory = getObj('category').value;
+	createNewStopic(defaultStopicTitle, defaultStopicCategory);
+	
+	//} else {
+	//	self.location = '$stopic_admin_url';
+	//}
+}
+
+function ctrlStopicTitle(isFocus) {
+	var defaultStopicTitle = '（未命名）';
+	var title = getObj('stopicTitle').value;
+	if (isFocus) {
+		if (title == defaultStopicTitle) {getObj('stopicTitle').value = '';}
+	} else {
+		if ('' == title) {getObj('stopicTitle').value = defaultStopicTitle;}
+	}
+}
+
+
+function createNewStopic(stopicTitle, stopicCategory) {
+	ajax.send("$ajaxurl", "job=initstopic&category="+stopicCategory+"&title="+stopicTitle, function(){
+		var isSuccess = ajax.request.responseText;
+		isSuccess = isSuccess.split('\t');
+		if ('success' != isSuccess[0]) {
+			alert('初始化专题失败');
+			//self.location = '$stopic_admin_url';
+		} else {
+			getObj('stopicTitle').value = stopicTitle;
+			getObj('stopicId').value = isSuccess[1];
+		}
+	});
+	return true;
+}
+
+//tips
+function tipDisplayCtrl() {
+	var ishide = getObj("opTipOpen").className == 'topics_tips_open';
+	getObj('opTipOpen').className = ishide ? 'topics_tips_close' : 'topics_tips_open';
+	getObj('showAdvance').style.display = ishide ? '' : 'none';
+	getObj('opTipOpen').innerHTML = ishide ? '收起细节设置<span class="f9">▲</span>' : '更多细节设置<span class="f9">&#9660;</span>';
+	
+}
+//getObj("opTipOpen").onclick = tipDisplayCtrl;
+//getObj("opTipClose").onclick = tipDisplayCtrl;
+
+//category
+getObj("category").onchange = function() {
+	getObj("advanceIframe").src = getObj("opMakeForm").action + "&job=advance&stopic_id=" + isStopicInit() + "&category_id=" + getObj("category").value;
+}
+
+//create category
+getObj("opCreateCategoryLink").onclick = function() {
+	getObj("opCreateCategoryShowForm").style.display = '';
+	getObj("opCreateCategoryLink").style.display = 'none';
+	getObj("opCreateCategoryFormInput").value = '';
+	getObj("opCreateCategoryFormInput").focus();
+}
+getObj("opCreateCategoryFormSubmit").onclick = function() {
+	if (!checkCategoryName()) {
+		getObj("opCreateCategoryFormInput").focus();
+		return false;
+	}
+	createCategory();
+}
+function checkForCategorySubmit(event) {
+	if (event.keyCode == 13) {
+		getObj("opCreateCategoryFormSubmit").onclick();
+		event.cancel = true;
+		return false;
+	}
+	return true;
+}
+function checkCategoryName() {
+	var categoryName = getObj("opCreateCategoryFormInput").value;
+	if ("" == categoryName) {
+		ctrlErrorMsg(true, 'opCategoryNameError', '请填写分类名称', 'opCategoryNameErrorMsg');
+	} else {
+		ctrlErrorMsg(false, 'opCategoryNameError', '');
+		return true;
+	}
+	return false;
+}
+function createCategory() {
+	ajax.send("$ajaxurl", "job=createcategory&name="+getObj("opCreateCategoryFormInput").value, function(){
+		var isSuccess = ajax.request.responseText;
+		isSuccess = isSuccess.split('\t');
+		if ('success' != isSuccess[0]) {
+			ctrlErrorMsg(true, 'opCategoryNameError', '分类名有重复', 'opCategoryNameErrorMsg');
+			getObj("opCreateCategoryFormInput").focus();
+		} else {
+			ctrlErrorMsg(false, 'opCategoryNameError', '');
+			getObj("category").options.add(new Option(getObj("opCreateCategoryFormInput").value, isSuccess[1]));
+			getObj("category").value = isSuccess[1];
+			getObj("opCreateCategoryShowForm").style.display = 'none';
+			getObj("opCreateCategoryLink").style.display = '';
+			getObj("category").onchange();
+		}
+	});
+	return true;
+}
+function ctrlErrorMsg(isDisplay, displayId, msg, msgId) {
+	if ('' != msg) {
+		getObj(msgId).innerHTML = msg;
+	}
+	getObj(displayId).style.display = isDisplay ? '' : 'none';
+}
+
+//pickcolor
+function pickReback(obj,color){
+	if (typeof obj == 'string') {
+		obj = getObj(obj);
+	}
+	obj.style.color = color;
+}
+</script>
+
+<!--
+EOT;
+?>
+-->

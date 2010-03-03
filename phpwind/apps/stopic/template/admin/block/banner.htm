@@ -1,0 +1,69 @@
+<!--
+<?php
+
+if ('show' == $block_job) {
+print <<<EOT
+-->
+
+<div class="banner">
+	<img src="{$block_data[image]}" />
+<!--
+EOT;
+	if ('' != $block_data['title']) {
+print <<<EOT
+-->
+	<h1 style="left:{$block_data[title_left]}px;top:{$block_data[title_top]}px; font:{$block_data[title_size]}px Arial; color:{$block_data[title_color]};">{$block_data[title]}</h1>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+</div>
+
+<!--
+EOT;
+} else {
+	if (empty($block_data['image'])) $block_data['image'] = $stopic_data['layout_config']['bannerurl'];
+	if (empty($block_data['title_left'])) $block_data['title_left'] = 50;
+	if (empty($block_data['title_top'])) $block_data['title_top'] = 50;
+	if (empty($block_data['title_size'])) $block_data['title_size'] = 50;
+print <<<EOT
+-->
+
+<tbody>
+
+	<tr>
+        	<td width="80">模块名称：</td>
+            <td><input type="text" name="block_title" value="$block[title]" class="input"></td>
+	</tr>
+	<tr>
+        	<td width="80">横幅图片：</td>
+            <td><input type="text" id="{$block_id}_banner_image" name="banner_image" value="{$block_data[image]}" class="input" size="60"></td>
+	</tr>
+	<tr>
+        	<td>文字标题：</td>
+            <td><input name="banner_title" type="text" class="input" value="{$block_data[title]}" /></td>
+	</tr>
+	<tr>
+        	<td>文字位置：</td>
+            <td>
+            	<span class="mr">距离左边 <input name="postion_left" type="text" class="input" size="5" value="{$block_data[title_left]}" />px</span>&nbsp;&nbsp;
+            	距离顶部 <input name="postion_top" type="text" class="input" size="5" value="{$block_data[title_top]}" />px
+            </td>
+	</tr>
+	<tr>
+        	<td>文字样式：</td>
+        	<td>
+        	大小 <input name="font_size" type="text" class="input" size="5" value="{$block_data[title_size]}" />px&nbsp;&nbsp;
+			 颜色 <input id="{$block_id}_font_color" name="font_color" value="{$block_data[title_color]}" type="text" class="input" size="10" /><img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'{$block_id}_font_color',function(){pickReback('{$block_id}_font_color_span',color_picker)})">
+			<span id="{$block_id}_font_color_span" style="color:{$block_data[title_color]};">■■■■</span>
+        </td>
+	</tr>
+</tbody>
+
+
+<!--
+EOT;
+}
+?>
+-->

@@ -1,0 +1,34 @@
+<!--<?php print <<<EOT
+-->
+<div class="c"></div>
+<!--
+EOT;
+if($adskin==2 || $GLOBALS['poweredby']){
+$charset = strtoupper($GLOBALS['db_charset']);print <<<EOT
+-->
+<div class="bottom">
+<span class="fr" style="padding:0 20px 0 0;">
+	<a href="$admin_file?adminjob=admin&job=notice" onclick="openNewUrl('default','关于PHPWind','$admin_file?adminjob=admin&job=notice');return false;" >关于PHPWind</a>
+</span>
+Powered by&nbsp;&nbsp;<a href="http://www.phpwind.net/" target="_blank"><b>PHPWind</b> $wind_version ({$charset})</a>&nbsp;&copy; 2003-09,<b style="color: #FF9900">phpwind.com</b>
+<!--
+EOT;
+if($db_debug){print <<<EOT
+-->
+<br /><span class="tac"><small>Query {$db->query_num}</small></span>
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+</body></html>
+<!--
+EOT;
+if(!$showafooter){
+afooter(true);
+}?>-->

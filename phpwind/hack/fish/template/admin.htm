@@ -1,0 +1,186 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+
+<table width="98%" align=center cellspacing=1 cellpadding=3 class=i_table>
+<tr>
+  <td colspan=2 class=head>讯息</td>
+</tr>
+<tr>
+  <td class=tr3>《海底探宝》版权归原作者所有 ，【恋之Q宠家族】-bbs.lzday.com.cn友情升级 PW7.32版</td>
+</tr>
+</table>
+<br>
+
+
+<!--
+EOT;
+if(empty($action)){
+print <<<EOT
+-->
+
+<form action="$basename&action=save" method="post">
+<table width="98%" align=center cellspacing=1 cellpadding=3 class=i_table>
+  <tr>
+    <td class=head colspan=3><b>插件基本设置</b></td>
+  </tr>
+  <tr class=tr3>
+    <td >是否开启本插件：</td>
+    <td class=tr3 colspan="2"><input name="cheatopen" type="radio" value="1" $ifcheat1/>
+      开启
+        <input name="cheatopen" type="radio" value="0" $ifcheat0 />
+      关闭</td>
+  </tr>
+ <tr class=tr3>
+	<td>关闭提示信息</td>
+        <td class=tr3 colspan="2">
+	<textarea name="cheatopenmsg" cols="70" rows="7" >$cheatopenmsg</textarea>	</td>
+ </tr>
+<tr class=tr3>
+<td>允许会员探险的群组</td>
+<td class=tr3 colspan="2">
+			<table cellspacing='0' cellpadding='0' border='0' width='100%' align='center'>
+				<tr>
+<!--
+EOT;
+$num = 0;
+foreach($ltitle as $key => $value){
+	if($key==1 || $key==2 )continue;
+	$num++;
+	$htm_tr = $num % 4 == 0 ? '</tr><tr>' : '';
+	$g_ck=strpos($fish_groups,",$key,")!==false ? 'checked' : '';
+print <<<EOT
+-->
+					<td><input type='checkbox' name='groups[]' value='$key' $g_ck>$value</td>
+					$htm_tr
+<!--
+EOT;
+}print <<<EOT
+-->
+			</tr></table>	</td>
+</tr>
+  <tr>
+    <td class=tr3>是否对外来探险者（游客）显示：</td>
+    <td class=tr3 colspan="2"><label>
+      <input type="radio" name="guestview" value="1" $ifguest1/>
+      显示
+      <input type="radio" name="guestview" value="0" $ifguest0/>
+      禁止
+    </label></td>
+  </tr>
+<tr>
+    <td class=tr3>受伤休息时间(单位分钟，必须大于0)</td>
+    <td class=tr3 colspan="2"><input name="vtime" type="text" value="$vtime" size="7">    </td>
+</tr>
+  <tr>
+    <td class=tr3>是否启用自动发送：</td>
+    <td class=tr3 colspan="2"><label>
+      <input type="radio" name="cview" value="1" $ifc1/>
+      显示
+      <input type="radio" name="cview" value="0" $ifc0/>
+      禁止      
+    </label></td>
+  </tr>
+<tr>
+    <td class=tr3>时间(单位秒)</td>
+    <td class=tr3 colspan="2"><input name="cutime" type="text" value="$cutime" size="7">    </td>
+</tr>
+
+<tr class=tr3>
+    <td colspan="3" class=head>现有增加财富宝藏种类</td>
+</tr>
+<tr>
+    <td class=tr3>海马</td>
+    <td class=tr3 colspan="2"><input name="fish1money" type="text" value="$fish1money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+    <td class=tr3>驼背鲸</td>
+    <td class=tr3 colspan="2"><input name="fish3money" type="text" value="$fish3money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+    <td class=tr3>金鱼</td>
+    <td class=tr3 colspan="2"><input name="fish4money" type="text" value="$fish4money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+  <td class=tr3>南海II号宝船</td>
+  <td class=tr3 colspan="2"><input name="fish8money" type="text" value="$fish8money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+  <td class=tr3>美人鱼</td>
+  <td class=tr3 colspan="2"><input name="fish9money" type="text" value="$fish9money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+  <td class=tr3>珊瑚礁</td>
+  <td class=tr3 colspan="2"><input name="fish12money" type="text" value="$fish12money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+  <td class=tr3>珍珠</td>
+  <td class=tr3 colspan="2"><input name="fish13money" type="text" value="$fish13money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+    <td class=tr3>比目鱼</td>
+    <td class=tr3 colspan="2"><input name="fish6money" type="text" value="$fish6money" size="7">
+      (单位金钱) </td>
+</tr>
+
+<tr class=tr3>
+    <td colspan="3" class=head>现有减少财富危险机会</td>
+</tr>
+<tr>
+    <td class=tr3>大白鲨</td>
+    <td class=tr3 colspan="2"><input name="fish2money" type="text" value="$fish2money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+    <td class=tr3>食人鱼(单位金钱)</td>
+    <td class=tr3 colspan="2"><input name="fish5money" type="text" value="$fish5money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+    <td class=tr3>鳄鱼(单位金钱)</td>
+    <td class=tr3 colspan="2"><input name="fish7money" type="text" value="$fish7money" size="7">
+      (单位金钱) </td>
+</tr>
+<tr>
+  <td class=tr3>剧毒海蜇</td>
+  <td class=tr3 colspan="2"><input name="fish11money" type="text" value="$fish11money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+  <td class=tr3>海怪</td>
+  <td class=tr3 colspan="2"><input name="fish14money" type="text" value="$fish14money" size="7" />
+    (单位金钱)</td>
+</tr>
+<tr>
+    <td class=tr3>深海乌贼</td>
+    <td class=tr3 colspan="2"><input name="fish10money" type="text" value="$fish10money" size="7" />
+      (单位金钱)</td>
+</tr>
+</table>
+<br/>
+  <center>
+    <input type="submit" name="Submit" value="提  交">
+      <input type="reset" name="Submit" value="重  置"></center>
+
+</form>
+
+
+<!--
+EOT;
+}print <<<EOT
+-->
+
+
+
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

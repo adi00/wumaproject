@@ -1,0 +1,25 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$admin_file?adminjob=ipban" class="two">IP 禁止</a></li>
+<li><a href="$admin_file?adminjob=ipstates">IP 统计</a></li>
+<li><a href="$admin_file?adminjob=ipsearch">IP 检索</a></li>
+</ul>
+<h3><b>提示信息</b></h3>
+<div class="tr5">禁止后，指定的IP将无法访问站点。<br>可用于禁止某个具体IP，如：192.0.0.1<br>可用于禁止某个IP网段，如：192.0.0<br>多个IP信息，请使用换行符或回车键进行分隔</div>
+<form action=$basename method=post name="submit">
+<h2><b>以下为被禁止的IP:</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td>
+<textarea cols=100 rows=10 name="baninfo">$baninfo</textarea>
+</td></tr></table><br>
+<input type=hidden name="action" value="unsubmit">
+<center><input type="submit" class="btn" value="提 交" name="submit"></center><br/>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>
+-->

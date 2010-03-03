@@ -1,0 +1,251 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<style type="text/css">
+.fourm{line-height:22px;margin-left:6px;}
+.fourm span{float:left;background:url($imgpath/admin/setfourm/fourm-one.gif) 0 0 no-repeat;}
+.fourm .fourm-one{background-position:left 0;width:40px;height:21px;}
+.fourm .fourm-two{background-position:0 -21px;width:40px;height:21px;}
+.fourm .fourm_name{float:none;background:none;}
+</style>
+<ul class="nav3">
+<li><a href="$basename" $menu_bbs>论坛模式</a></li>
+<li><a href="$basename&mode=area" $menu_area>门户模式</a></li>
+</ul>
+<!--
+EOT;
+if($mode == 'area'){print <<<EOT
+-->
+	<h3>门户模式 SEO 优化设置</h3>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<h3>论坛模式 SEO 优化设置</h3>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<ul class="tr5">
+	<li>网页SEO优化设置规则：</li>
+	<li>网站名称：{wzmc}（应用范围：所有位置）</li>
+	<li>版块名称：{bkmc}（应用范围：除首页以外）</li>
+	<li>帖子分类名称：{flmc}（应用范围：除首页以外）</li>
+	<li>帖子名称：{tzmc}（应用范围：帖子阅读页和文章页）</li>
+	<li>tag名称：{tmc}（应用范围：帖子阅读页和文章页）</li>
+	<li>文章概要：{wzgy}（应用范围：帖子阅读页）</li>
+	<li>以上标签（必须包含大括号"{}"）可以通过添加在下面来优化页面SEO设置，多个标签之间可以用半角连字符"-"、半角","或半角空格隔开。留空为默认SEO设置，如果标签不再应用范围内则不显示此标签</li>
+</ul>
+<div class="tr5">
+<form action="$basename" method="post" >
+<input type="hidden" name="action" value="update" />
+<input type="hidden" name="mode" value="$mode">
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tac tr3 s3">
+		<td class='tal'>首页</td>
+		<td width="70%">&nbsp;</td>
+		<td width="10%"></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Title：</td>
+		<td class="tal"><input style="width: 100%" type="text" class="input" name="contents[title_index]" value="{$config[title][index]}"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Description：</td>
+		<td class="tal"><input style="width: 100%" type="text" class="input" name="contents[metadesc_index]" value="{$config[metadescrip][index]}"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Keywords：</td>
+		<td class="tal"><input style="width: 100%" type="text" class="input" name="contents[metakeyword_index]" value="{$config[metakeyword][index]}"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+
+	<tr class="tac tr3"><td colspan="3">&nbsp;</td></tr>
+	<tr class="tac tr3 s3">
+		<td class='tal'>
+<!--
+EOT;
+if($mode == 'area'){
+print <<<EOT
+-->
+	  	频道页
+<!--
+EOT;
+}elseif(empty($mode) || $mode == 'bbs'){ print <<<EOT
+-->
+		帖子列表页
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td><input type="button" class="btn" name="openfordetail" value="展开详细设置" onclick="cateopen('bbs',null)"/></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Title：</td>
+		<td class="tal"><input type="text" class="input" name="contents[title_thread]" value="{$config[title][thread]}" style="width: 100%"  maxlength="250"  /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Description：</td>
+		<td class="tal"><input type="text" class="input" name="contents[metadesc_thread]" value="{$config[metadescrip][thread]}" style="width: 100%"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Keywords：</td>
+		<td class="tal"><input type="text" class="input" name="contents[metakeyword_thread]" value="{$config[metakeyword][thread]}" style="width: 100%"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+
+	<tr id="cate_bbs" style="display: none;">
+		<td class="tal" colspan="3">
+			<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+foreach($categorys as $key => $cate){
+$_key = 'bbs_thread_'.$cate[fid];
+if($mode == 'area'){
+print <<<EOT
+-->
+			<tbody>
+			<tr class="tac tr3">
+				<td width="5%"></td>
+				<td class="tal" width="15%">$cate[name]</td>
+				<td class="tal">Title：</td>
+				<td class="tal" width="50%"><input type="text" class="input" name="forums[$cate[fid]][title]" value="$cate[title]" style="width: 100%" maxlength="250" /></td>
+				<td></td>
+			</tr>
+			<tr class="tac tr3">
+				<td width="5%"></td>
+				<td class="tal" width="15%"></td>
+				<td class="tal">Meta Description：</td>
+				<td class="tal" width="50%"><input type="text" class="input" name="forums[$cate[fid]][descrip]" value="$cate[metadescrip]" style="width: 100%" maxlength="250" /></td>
+				<td></td>
+			</tr>
+			<tr class="tac tr3">
+				<td width="5%"></td>
+				<td class="tal" width="15%"></td>
+				<td class="tal">Meta Keywords：</td>
+				<td class="tal" width="50%"><input type="text" class="input" name="forums[$cate[fid]][keywords]" value="$cate[keywords]" style="width: 100%" maxlength="250" /></td>
+				<td></td>
+			</tr>
+			</tbody>
+<!--
+EOT;
+}elseif(empty($mode) || $mode == 'bbs'){
+print <<<EOT
+-->
+			<tbody>
+			<tr class="tac tr3">
+				<td width="5%"></td>
+				<td class="tal" width="26%"><span class="open fl" onclick='cateopen($cate[fid],this)' ></span>$cate[name]</td>
+				<td class="tal"></td>
+				<td class="tal" width="50%">&nbsp;</td>
+				<td></td>
+			</tr>
+			</tbody>
+			<tbody id="cate_$cate[fid]" style="display: none">
+<!--
+EOT;
+foreach($forumList[$cate['fid']] as $forum){
+$_key = 'bbs_thread_'.$forum[fid];
+print <<<EOT
+-->
+			<tr class="tac tr3">
+				<td width="2%"></td>
+				<td class="tal"><div class="fourm">$forum[limage]<span class="fourm_name">$forum[name]</span></div></td>
+				<td class="tal">Title：</td>
+				<td class="tal"><input type="text" class="input" name="forums[$forum[fid]][title]" value="$forum[title]" style="width: 100%" maxlength="250" /></td>
+				<td></td>
+			</tr>
+			<tr class="tac tr3">
+				<td width="2%"></td>
+				<td class="tal"><div class="fourm">$forum[limage1]</div></td>
+				<td class="tal">Meta Description：</td>
+				<td class="tal"><input type="text" class="input" name="forums[$forum[fid]][descrip]" value="$forum[metadescrip]" style="width: 100%" maxlength="250"/></td>
+				<td></td>
+			</tr>
+			<tr class="tac tr3">
+				<td width="2%"></td>
+				<td class="tal"><div class="fourm">$forum[limage1]</div></td>
+				<td class="tal">Meta Keywords：</td>
+				<td class="tal"><input type="text" class="input" name="forums[$forum[fid]][keywords]" value="$forum[keywords]" style="width: 100%" maxlength="250"/></td>
+				<td></td>
+			</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</tbody>
+<!--
+EOT;
+}}print <<<EOT
+-->
+			</table>
+		</td>
+	</tr>
+
+	<tr class="tac tr3"><td colspan="3">&nbsp;</td></tr>
+	<tr class="tac tr3 s3">
+		<td class="tal">
+<!--
+EOT;
+if($mode == 'area'){
+print <<<EOT
+-->
+	  	文章页
+<!--
+EOT;
+}elseif(empty($mode) || $mode == 'bbs'){ print <<<EOT
+-->
+		帖子阅读页
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td class="tal"></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Title：</td>
+		<td class="tal"><input type="text" class="input" name="contents[title_read]" value="{$config[title][read]}" style="width: 100%"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Description：</td>
+		<td class="tal"><input type="text" class="input" name="contents[metadesc_read]" value="{$config[metadescrip][read]}" style="width: 100%"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+	<tr class="tac tr3">
+		<td class="tal">Meta Keywords：</td>
+		<td class="tal"><input type="text" class="input" name="contents[metakeyword_read]" value="{$config[metakeyword][read]}" style="width: 100%"  maxlength="250" /></td>
+		<td></td>
+	</tr>
+</table>
+<br />
+<center><input type="submit" name="submit" value="提交" class="btn"></center>
+</form>
+</div>
+<script language="JavaScript">
+function cateopen(id,obj) {
+	var o = getObj('cate_' + id);
+	if (o == null) return;
+	if (o.style.display == 'none') {
+		o.style.display = '';
+		if (obj != null) obj.className = 'close fl';
+	} else {
+		o.style.display = 'none';
+		if (obj != null) obj.className = 'open fl';
+	}
+}
+</script>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

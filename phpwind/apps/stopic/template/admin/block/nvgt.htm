@@ -1,0 +1,103 @@
+<!--
+<?php
+
+if ('show' == $block_job) {
+print <<<EOT
+-->
+
+<!--
+EOT;
+	if (is_array($block_data['nav']) && !empty($block_data['nav'])) {
+print <<<EOT
+-->
+<ul class="zt_nav cc" style="background-color:{$block_data[link_bgcolor]};">
+<!--
+EOT;
+		foreach ($block_data['nav'] as $nav) {
+print <<<EOT
+-->
+	<li><a style="color:{$block_data[link_color]};" href="{$nav[url]}">{$nav[title]}</a></li>
+<!--
+EOT;
+		}
+print <<<EOT
+-->
+</ul>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+
+<!--
+EOT;
+} else {
+	if (empty($block_data['link_color'])) $block_data['link_color'] = $stopic_data['layout_config']['navfontcolor'];
+	if (empty($block_data['link_bgcolor'])) $block_data['link_bgcolor'] = $stopic_data['layout_config']['navbgcolor'];
+print <<<EOT
+-->
+
+<tbody id="fildbody">
+	<tr>
+		<td colspan="3">
+			模块标题： <input type="text" name="block_title" value="$block[title]" class="input">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			样式设置：
+			链接字体颜色
+			<input id="{$block_id}_link_color" name="link_color" value="{$block_data[link_color]}" type="text" class="input" size="10" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'{$block_id}_link_color',function(){pickReback('{$block_id}_link_color_span',color_picker)})">
+			<span id="{$block_id}_link_color_span" style="color:{$block_data[link_color]};">■■■■</span>
+			&nbsp;&nbsp;
+			导航背景颜色
+			<input id="{$block_id}_link_bgcolor" name="link_bgcolor" value="{$block_data[link_bgcolor]}" type="text" class="input" size="10" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'{$block_id}_link_bgcolor',function(){pickReback('{$block_id}_link_bgcolor_span',color_picker)})">
+			<span id="{$block_id}_link_bgcolor_span" style="color:{$block_data[link_bgcolor]};">■■■■</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			添加帖子tid： <input type="text" id="tid" size="10" class="input">（选填）
+			<input type="button" class="btn" value="添加导航记录" onclick="javascript:New(addFildData,['fildbody','filddata','tid']);">
+		</td>
+	</tr>
+	<tr>
+		<td>导航文字</td>
+		<td>链接地址</td>
+		<td>&nbsp;</td>
+	</tr>
+	
+<!--
+EOT;
+	foreach ($block_data['nav'] as $v) {
+print <<<EOT
+-->
+	<tr>
+		<td><input type="text" size="26" name="title[]" value="{$v[title]}" class="input"></td>
+		<td><input type="text" size="26" name="url[]" value="{$v[url]}" class="input"></td>
+		<td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+	</tr>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+	
+</tbody>
+
+<tbody id="filddata" style="display:none;">
+	<tr>
+		<td><input type="text" size="26" name="title[]" value="" class="input"></td>
+		<td><input type="text" size="26" name="url[]" value="" class="input"></td>
+		<td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+	</tr>
+</tbody>
+
+
+<!--
+EOT;
+}
+?>
+-->

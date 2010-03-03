@@ -1,0 +1,60 @@
+/*
+菜单上边的圆角
+*/
+.menu_top
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/images/menu_top.png', sizingMethod = 'scale');
+    height: 28px;
+}
+/*
+菜单中间的背景
+*/
+.menu_bg
+{
+    height: 100 % ;
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_bg.png', sizingMethod = 'scale');
+}
+/*
+菜单底部的背景
+*/
+.menu_bottom
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_bottom.png', sizingMethod = 'scale');
+    height: 28px;
+}
+/*
+菜单的箭头
+*/
+.menu_s
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_s.png', sizingMethod = 'scale');
+    width: 18px;
+    height: 18px;
+    position: absolute;
+}
+/*
+开始菜单的背景
+*/
+.startPanel
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/startPanel.png', sizingMethod = 'scale');
+}
+/*
+修正ie6的位置问题，特殊处理
+*/
+.ie6pos
+{
+POSITION: absolute; TOP: 0px
+}
+/*
+菜单项
+*/
+.menu_item
+{
+padding:15px 0 0 25px;
+}

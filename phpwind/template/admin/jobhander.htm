@@ -1,0 +1,779 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<style type="text/css">
+.task_make li{padding-right:15px;float:left;}
+.task_make .current{color:#008800; font-weight:700;}
+.conditions{margin-bottom:5px;overflow:hidden;width:380px;}
+.con_choose_A{width:105px;float:left;}
+.con_choose_A li{height:30px;line-height:30px;overflow:hidden;}
+.con_choose_A li a{display:block;padding-left:15px;color:#666666;height:30px;line-height:30px;overflow:hidden;}
+.con_choose_A li a:hover{text-decoration:none;color:#336699;}
+.con_choose_A li a em{display:none;width:0px;height:0px;overflow:hidden;float:right;border-top:4px transparent dotted;border-bottom:4px transparent dotted;border-right:0px transparent dotted;border-left:4px #666666 solid;margin:10px 12px 0 0;}
+.con_choose_A li a:hover em{border-left:4px #336699 solid;}
+.con_choose_A .current a{border:1px solid #cbcbcb;background:#fff;border-left:1px solid #8b8b8b;border-top:1px solid #8b8b8b;border-right:0px;margin-right:-1px; position:absolute;width:90px;}
+.con_choose_A .current a em,.con_choose_A li a:hover em{display:block;}
+
+.con_choose_B{float:left;border:1px solid #cbcbcb;background:#fff;border-left:1px solid #8b8b8b;border-top:1px solid #8b8b8b;}
+.con_choose_B ul{margin-top:-1px;overflow:auto;height:180px;width:200px;_padding-top:10px;}
+.con_choose_B li{line-height:30px;overflow:hidden;height:30px;}
+.con_choose_B li a{display:block;padding:0 30px 0 20px;color:#666666;line-height:30px;overflow:hidden;height:30px;}
+.con_choose_B li a:hover{text-decoration:none;color:#336699;}
+.con_choose_B li input{ vertical-align:middle;}
+dl.task-mng-group{ clear:both;margin-bottom:.8em; line-height:20px; display:block; float:left ; width:100%}
+dl.task-mng-group dt{ width:8em ; paading-right:.5em;text-align:right; float:left;}
+dl.task-mng-group dd{margin-left:9em;color:#666}
+dl.task-mng-group dd span{ float:left; width:14em;height:20px;overflow:hidden}
+
+</style>
+<script type="text/javascript" language="JavaScript" src="js/desktop/adminjob.js"></script>
+<script type="text/javascript" language="JavaScript" src="js/date.js"></script>
+<ul class="nav3">
+	<li><a href="$basename" hidefocus="true">任务管理</a></li>
+    <li><a href="$basename&action=add" hidefocus="true" class="two">添加任务</a></li>
+</ul>
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+1. 可以通过设置不同的任务奖励方式、任务申请条件和任务的完成条件，组合成各种适合不同用户对象的任务<br/>
+2. 注意：“符合条件自动申请”启用后，为了不影响网站性能，建议不要设置“任务周期”、“前置任务”和“人数限制”<br/>
+</div>
+<h2>任务基本设置</h2>
+<script type="text/javascript">
+var checkForm = function(form){
+	var title = form.title.value;
+	var description = form.description.value;
+	if(title == ""){
+		alert("任务标题不能为空");
+		return false;
+	}
+	if(description == ""){
+		alert("任务描述不能为空");
+		return false;
+	}
+	return true;
+}
+</script>
+<form action="$basename&action=add" method="post" enctype="multipart/form-data" onsubmit="return checkForm(document.FORM);" name="FORM">
+<input name="step" type="hidden" value="2" />
+<input name="id" type="hidden" value="$id" />
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">任务名称</td>
+        <td colspan="2"><input name="title" value="$title" type="text" class="input" style="width:300px;" /></td>
+    </tr>
+	<tr class="tr3">
+    	<td valign="top">任务描述<br />(支持html代码)</td>
+        <td colspan="2"><textarea name="description" style="overflow:auto;width:300px;height:80px;">$description</textarea></td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">任务图标</td>
+      <td colspan="2"><input name="icon" type="file" class="input" /><br />留空则使用默认图标，建议图标文件尺寸为 64 x 64</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">开始时间</td>
+      <td width="140"><input name="starttime" value="$starttime" type="text" class="input" id="starttime" /></td><td>任务开始时间，留空表示任务立即开始</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">结束时间</td>
+      <td><input name="endtime" value="$endtime" type="text" class="input" id="endtime" /></td><td>任务结束时间，结束后会员将无法申请此任务，留空表示不限制</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">任务周期(小时)</td>
+     	<td valign="top"><input name="period" type="text" value="$period" class="input" /></td><td>留空表示一次性任务，否则为周期性任务，例如设置为 24 小时，则表示会员领取并完成任务 24 小时后可再次申请该任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">任务奖励</td>
+     	<td valign="top" colspan="2">
+        	<ul class="task_make cc" id="reward">
+            	<li class="current"><input name="reward[category]" type="radio" value="none" {$r_reward[none]} /> 无</li>
+            	<li><input name="reward[category]" type="radio" value="credit" {$r_reward[credit]} /> 积分</li>
+                <li><input name="reward[category]" type="radio" value="tools" {$r_reward[tools]} {$toolsIsOpen}/> 道具</li>
+                <li><input name="reward[category]" type="radio" value="medal" {$r_reward[medal]} {$medalIsOpen} /> 勋章</li>
+                <li><input name="reward[category]" type="radio" value="usergroup" {$r_reward[usergroup]} /> 用户组</li>
+                <li><input name="reward[category]" type="radio" value="invitecode" {$r_reward[invitecode]} {$inviteCodeIsOpen} /> 注册邀请码</li>
+            </ul>
+            奖励的类型有：积分、道具、勋章、注册邀请码及特殊用户组，其中，道具、勋章和邀请码需要开启相应功能
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+	window.onload = function(){
+		adminJobReady("reward_$category","$jobType","job_$jobName");
+	}
+</script>
+<!--====根据上面选择切换===-->
+<div id="rewardTables">
+<!-- 积分 -->
+<div id="reward_none" style="display:none;"></div>
+<div id="reward_credit" style="display:none;">
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">积分名称</td>
+        <td colspan="2">$creditSelect</td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;">积分数量</td>
+        <td colspan="2"><input name="reward[credit][num]" value="$r_credit[num]" type="text" class="input" /></td>
+    </tr>
+</table>
+</div>
+
+<!-- 道具 -->
+<div id="reward_tools" style="display:none;">
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">道具名称</td>
+        <td colspan="2">$toolsSelect</td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;">奖励数量</td>
+        <td colspan="2"><input name="reward[tools][num]" type="text" class="input" value="$r_tools[num]" /></td>
+    </tr>
+</table>
+</div>
+
+<!-- 勋章 -->
+<div id="reward_medal" style="display:none;">
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">勋章名称</td>
+        <td colspan="2">$medalSelect</td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;">有效期(天)</td>
+        <td colspan="2"><input name="reward[medal][day]" type="text" class="input" value="$r_medal[day]"/></td>
+    </tr>
+</table>
+</div>
+
+<!-- 用户组 -->
+<div  id="reward_usergroup" style="display:none;">
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">用户组名称</td>
+        <td colspan="2">$levelSelect</td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;">奖励时间(天)</td>
+        <td colspan="2"><input name="reward[usergroup][day]" type="text" class="input" value="$r_usergroup[day]" /></td>
+    </tr>
+</table>
+</div>
+
+<!-- 注册邀请码 -->
+<div id="reward_invitecode" style="display:none;">
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">邀请码数量</td>
+        <td colspan="2">
+            <input name="reward[invitecode][num]" type="text" class="input" value="$r_invitecode[num]" />
+         </td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;">有效期(天)</td>
+        <td colspan="2"><input name="reward[invitecode][day]" type="text" class="input" value="$r_invitecode[day]" /></td>
+    </tr>
+</table>
+</div>
+</div>
+<!--====根据上面选择切换结束===-->
+<h2>任务申请条件</h2>
+<table width="100%">
+	<tr class="tr3">
+    	<td style="width:150px;">限制可申请用户组<br /><span class="gray">（全不选则不限制）</span></td>
+        <td style="line-height:24px;">
+        $levelCheckBox
+        </td>
+    </tr>
+	<tr class="tr3">
+    	<td valign="top">前置任务</td>
+        <td>$preposeSelect</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">申请人数限制</td>
+        <td>
+            <input name="number" value="$number" type="text" class="input" /><br />当完成此任务的人次达到这个数值时，系统将自动拒绝新的申请，0 或留空为不限制
+        </td>
+    </tr>
+    <!--
+    <tr class="tr3">
+    	<td valign="top">老用户申请限制</td>
+        <td><input name="member" value="" type="radio" value="1" $member[1] /> 老用户已经熟悉功能的不能申请 &nbsp;&nbsp;&nbsp;<input name="member" type="radio" value="0" $member[0] /> 不限制</td>
+    </tr>
+    -->
+    <tr class="tr3">
+    	<td valign="top">符合条件自动申请</td>
+        <td><input name="auto" type="radio" value="1" $auto[1] /> 给符合条件的用户自动申请任务 &nbsp;&nbsp;&nbsp;<input name="auto" type="radio" value="0" $auto[0] /> 用户自己申请</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">显示设置</td>
+        <td><input name="display" type="radio" value="1" $display[1] /> 符合申请条件的才显示 &nbsp;&nbsp;&nbsp;<input name="display" type="radio" value="0" $display[0] /> 显示给所有用户</td>
+    </tr>
+</table>
+<h2>任务完成条件</h2>
+<table width="100%">
+    <tr class="tr3">
+    	<td valign="top">完成限制</td>
+        <td colspan="2"><input name="finish" type="radio" value="1" $finish[1] /> 必须完成 &nbsp;&nbsp;&nbsp;<input name="finish" type="radio" value="0" $finish[0] /> 可放弃</td>
+    </tr>
+	<tr class="tr3">
+    	<td style="width:150px;" valign="top">完成工作</td>
+        <td valign="top" style="500px;">
+        	<div class="conditions cc">
+            	<ul class="con_choose_A" id="joblist">
+                	$jobHtml
+                </ul>
+                <div class="con_choose_B" id="joball">
+                    $jobInfo
+                </div>
+            </div>
+        </td>
+        <td valign="top">
+        	申请任务后只有完成了什么动作才可以完成任务，比如上传了头像，发了贴……不同的动作会有不同的限制条件。
+        </td>
+    </tr>
+</table>
+<div id="jobTables" style="height:160px;">
+<!-- 任务具体内容开始               -->
+<!-- 完善资料 -->
+<table width="100%" id="job_doUpdatedata" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">完成成果</td>
+        <td valign="top" colspan="2">
+        	完善自己的个人资料后即可完成任务
+        </td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doUpdatedata][limit]" type="text" class="input"  value="$doUpdatedata[limit]"/>
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+<!-- 上传头像 -->
+<table width="100%" id="job_doUpdateAvatar" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">完成成果</td>
+        <td valign="top" colspan="2">
+        	成功上传个人头像
+        </td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doUpdateAvatar][limit]" type="text" class="input"  value="$doUpdateAvatar[limit]"/>
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+<!-- 发送消息 -->
+<table width="100%" id="job_doSendMessage" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定用户</td>
+        <td valign="top"><input name="factor[doSendMessage][user]" value="$doSendMessage[user]" type="text" class="input" /></td>
+        <td>给输入框中指定会员发送短消息后即完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doSendMessage][limit]" type="text" class="input"  value="$doSendMessage[limit]"/>
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 加好友 -->
+<table width="100%" id="job_doAddFriend" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">完成成果</td>
+        <td valign="top" width="300">
+        <input name="factor[doAddFriend][type]" type="radio"  value="1" $doAddFriend[type1] />加指定用户为好友
+        <input name="factor[doAddFriend][user]" type="text" class="input" value="$doAddFriend[user]" />
+        </td>
+        <td>将输入框中指定会员加为好友即可完成任务</td>
+    </tr>
+    <tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;"></td>
+        <td valign="top">
+        <input name="factor[doAddFriend][type]" type="radio"  value="2" $doAddFriend[type2] />最少加好友个数
+        <input name="factor[doAddFriend][num]" type="text" class="input" value="$doAddFriend[num]" />
+        </td>
+        <td>至少加多少个好友才能完成任务</td>
+    </tr>
+
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doAddFriend][limit]" type="text" class="input" value="$doAddFriend[limit]"/>
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 发贴 -->
+<table width="100%" id="job_doPost" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定版块</td>
+        <td valign="top" colspan="2"><select name="factor[doPost][fid]">$forumSelectHtml</select>
+        </td>
+    </tr>
+    <tr class="tr3 tr6">
+    	<td valign="top">至少发帖数</td>
+        <td valign="top">
+        	<input name="factor[doPost][num]" type="text" class="input" value="$doPost[num]"/>
+        </td>
+        <td>在指定的版块至少发多少帖后才可以完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doPost][limit]" type="text" class="input" value="$doPost[limit]" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 回复 -->
+<table width="100%" id="job_doReply" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定回复</td>
+        <td valign="top" width="350">
+        <input name="factor[doReply][type]" type="radio" value="1" $doReply[type1] /> 指定回复主题ID
+        <input name="factor[doReply][tid]" type="text" class="input" value="$doReply[tid]" />
+        </td>
+        <td>只能回复指定id的主题</td>
+    </tr>
+    <tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;"></td>
+        <td valign="top">
+        <input name="factor[doReply][type]" type="radio" value="2" $doReply[type2] /> 指定回复那个用户的主题
+        <input name="factor[doReply][user]" type="text" class="input" value="$doReply[user]" />
+        </td>
+        <td>只能回复指定用户发表的主题</td>
+    </tr>
+
+    <tr class="tr3 tr6">
+    	<td valign="top">至少回复数</td>
+        <td valign="top">
+        	<input name="factor[doReply][replynum]" type="text" class="input" value="$doReply[replynum]"/>
+        </td>
+        <td>至少回复多少贴后才可以完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="factor[doReply][limit]" type="text" class="input" value="$doReply[limit]" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 收藏 -->
+<table width="100%" id="job_doFavor" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+        <td valign="top">
+        <input name="" type="text" class="input" />
+        </td>
+        <td>只能收藏指定id的主题</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 分享 -->
+<table width="100%" id="job_doForumShare" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+        <td valign="top">
+        <input name="" type="text" class="input" />
+        </td>
+        <td>只能分享指定id的主题</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 评价 -->
+<table width="100%" id="job_doVote" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+        <td valign="top">
+        <input name="" type="text" class="input" />
+        </td>
+        <td>只能评价指定id的主题。只有在评价功能开启的时候才会显示这个功能选项</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 使用道具 -->
+<table width="100%" id="job_doUseTools" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">至少使用次数</td>
+        <td valign="top">
+        <input name="" type="text" class="input" />
+        </td>
+        <td>至少使用多少次道具才能完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 查看用户名片 -->
+<table width="100%" id="job_doLookCard" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+        <td valign="top">
+        <input name="" type="text" class="input" />
+        </td>
+        <td>查看指定主题id的楼主的名片后，即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 进入个人空间 -->
+<table width="100%" id="job_doEntrySelf" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">完成成果</td>
+        <td valign="top" colspan="2">进入用户自己的个人空间后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 进入朋友个人空间 -->
+<table width="100%" id="job_doEntryFriend" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定用户</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">进入指定用户的个人空间后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 发记录 -->
+<table width="100%" id="job_doWrite" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">至少发布记录数</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">至少发布多少个记录后才能完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 发日志 -->
+<table width="100%" id="job_doDiary" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">至少发布日志数</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">至少发布多少个日志后才能完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 传照片 -->
+<table width="100%" id="job_doPhoto" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">至少发布照片数</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">至少上传多少张照片后才能完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 分享 -->
+<table width="100%" id="job_doModeShare" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">只能分享指定id的主题</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 评论 -->
+<table width="100%" id="job_doComment" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定日志</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">只有评论了指定的日志后才能完成任务，可以直接拷入日志地址</td>
+    </tr>
+    <tr class="tr3 tr6">
+    	<td valign="top">指定照片</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">只有评论了指定的照片后才能完成任务，可以直接拷入照片地址？</td>
+    </tr>
+
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+
+
+
+<!-- 评分 -->
+<table width="100%" id="job_doPing" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">评分指定id的主题后，即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 置顶 -->
+<table width="100%" id="job_doHead" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的主题操作置顶后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 精华 -->
+<table width="100%" id="job_doDigest" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的主题操作精华后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 锁定 -->
+<table width="100%" id="job_doLock" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的主题操作锁定后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 提前 -->
+<table width="100%" id="job_doUp" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的提前操作锁定后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 压贴 -->
+<table width="100%" id="job_doDown" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的提前操作压贴后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 加亮 -->
+<table width="100%" id="job_doHighline" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的提前操作加亮后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+<!-- 推送-->
+<table width="100%" id="job_doPush" style="display:none;">
+	<tr class="tr3 tr6">
+    	<td valign="top" style="width:150px;">指定主题id</td>
+    	<td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td valign="top" colspan="2">将指定id的主题推送到门户后即可完成任务</td>
+    </tr>
+    <tr class="tr3">
+    	<td valign="top">时间限制(小时)</td>
+        <td valign="top">
+        	<input name="" type="text" class="input" />
+        </td>
+        <td>设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制</td>
+    </tr>
+</table>
+
+
+<!-- 红包奖励-->
+<table width="100%" id="job_doSendGift" style="display:none;">
+	<tr class="tr3">
+    	<td valign="top" style="width:150px;">完成成果</td>
+    	<td valign="top">
+        	申请任务后即可完成任务，得到奖励。一般用于日常的红包发放，请勿滥用。
+        </td>
+    </tr>
+</table>
+
+<!-- 任务具体内容结束 -->
+</div>
+<table width="100%">
+    <tr>
+    	<td width="160">&nbsp;</td>
+        <td style="padding:10px;"><input name="" type="submit" value="提 交" class="btn" /></td>
+    </tr>
+</table>
+</from>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>
+-->

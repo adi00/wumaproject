@@ -9,6 +9,9 @@ database:phpwind
 
 table: pw_teamprojects, pw_teamtasks
 
+url: http://10.5.57.226/phwind
+admin/111111
+
 
 = Details =
 

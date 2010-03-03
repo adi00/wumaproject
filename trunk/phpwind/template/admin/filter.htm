@@ -1,0 +1,675 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<style type="text/css">
+*{padding:0; margin:0;}
+.mgccf{background:#fff;border:3px solid #c9d6df; padding:15px 20px; width:420px}
+.mgccfh{font-size:14px; font-weight:bold; color:#000;margin:0 0 5px 0;}
+.mgccfp{font-size:12px; line-height:24px; }
+.mgccfq{font-size:12px; line-height:24px; color:#ff5500;}
+.mgccfyq{background:#fff;border:1px solid #b9c7d6; padding:15px; font-size:12px; line-height:200%; font-weight:bold;}
+.mgccfgray{color:#666; font-weight:normal;}
+.mgccfxz{background:#ffffdb;border:1px solid #f7e084; padding:15px; font-size:12px; line-height:200%;font-weight:bold;}
+.mgcgxbtn{margin:15px 0 0;}
+.mgccf2{background:#fff;border:1px solid #c9d6df; padding:15px 20px; width:220px}
+.newcate{background:transparent url(http://localhost/phpwind75/images/admin/setfourm/fourm.gif) no-repeat scroll 0 2px;cursor:pointer;height:11px;padding-left:15px;}
+.wordclasslist .word_state1 a,.wordclasslist .word_state0 a{padding-left:20px;background-image:url(images/admin/wordsfb/word_state.png);background-repeat: no-repeat}
+.wordclasslist .word_state1 a{background-position:0 0}
+.wordclasslist .word_state0 a{background-position:0 -24px}
+</style>
+<script language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script language="JavaScript">
+function setScan()
+{
+    type = getObj('type').value;
+    /*
+	skip = getObj('skip').value;
+	if (getObj('convert').checkd == true) {
+		convert = 1;
+	} else {
+		convert = 0;
+	}
+	*/
+	skip = 0;
+	convert = 0;
+
+	sendmsg('{$basename}&action=scan&job=go&type='+type+'&skip='+skip+'&convert='+convert);
+}
+
+function getSearch()
+{
+    if(getObj('keyword').value == '敏感词关键字') {
+        getObj('keyword').value='';
+    }
+}
+
+function setSearch()
+{
+    if(getObj('keyword').value == '') {
+        getObj('keyword').value='敏感词关键字';
+    }
+}
+
+function submitSearch()
+{
+    if(getObj('keyword').value == '敏感词关键字') {
+        getObj('keyword').value = '';
+    }
+}
+
+function addFilter()
+{
+    sendmsg('{$basename}&action=setting&job=add');
+}
+
+function editFilter(id)
+{
+    sendmsg('{$basename}&action=setting&job=edit&id='+id);
+}
+
+function showContent(tid, pid)
+{
+	sendmsg('{$basename}&action=show&tid='+tid+'&pid='+pid+'&type={$action}');
+}
+
+function getConfirm()
+{
+	sendmsg('{$basename}&action=synchronous&job=confirm');
+}
+
+function selected(id){
+
+	if(getObj("pid"+id).checked == true){
+		getObj("tid"+id).checked = true;
+	}else{
+		getObj("tid"+id).checked = false;
+	}
+}
+
+function addClass(){
+	sendmsg('{$basename}&action=class&job=add');
+}
+
+function editClass(id){
+	sendmsg('{$basename}&action=class&job=edit&id='+id);
+}
+
+function delClass(id){
+	sendmsg('{$basename}&action=class&job=del&class='+id);
+}
+
+function importClass(){
+	sendmsg('{$basename}&action=class&job=import');
+}
+
+function exportClass(classId){
+	if(classId == ''){
+		classId = '';
+	}
+	sendmsg('{$basename}&action=class&job=export&class='+classId);
+}
+
+function batchEdit(){
+	id = new Array();
+	form = document.FORM;
+	for (var i=0;i<form.elements.length;i++){
+		var e = form.elements[i];
+		if(e.checked == true){
+			id[i] = e.value;
+		}
+	}
+	sendmsg('{$basename}&action=setting&job=batchedit&id='+id);
+}
+
+function delWord(){
+	id = new Array();
+	form = document.FORM;
+	for (var i=0;i<form.elements.length;i++){
+		var e = form.elements[i];
+		if(e.checked == true){
+			id[i] = e.value;
+		}
+	}
+	sendmsg('{$basename}&action=setting&job=del&id='+id);
+}
+
+function switchFilter(id){
+	sendmsg('{$basename}&action=class&job=switch&class='+id);
+}
+
+function setSort(sort){
+	type  = getObj('type').value;
+	classid = getObj('class').value;
+	keyword = getObj('keyword').value;
+	if(keyword == '敏感词关键字') {
+		keyword = '';
+	}
+	window.location.href='{$basename}&action=setting&type='+type+'&class='+classid+'&keyword='+keyword+'&sort='+sort;
+}
+
+function importShow(){
+	show = '{$importshow}';
+	success = '{$success}';
+	fail = '{$fail}';
+	
+	if(show != '') {
+		sendmsg('{$basename}&action=class&job=importshow&success='+success+'&fail='+fail);
+	}
+}
+</script>
+<!--
+EOT;
+if ($admin_gid == 3 ){
+print <<<EOT
+-->
+<div style="font-size:12px; margin-top:15px; {$update_show}">
+<p>PAC为网站提供最新的通用敏感词库，站长可以第一时间同步到网站的敏感词库列表，以保证网站顺利运营。<input type="button" value="立即同步" onclick="getConfirm();"/></p>
+</div>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<!--
+EOT;
+if ($action == 'setting') {
+print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename&action=scan" >扫描帖子</a></li>
+	<li><a href="$basename&action=check">敏感帖审核</a></li>
+    <li><a href="$basename&action=setting" class="two">词库管理</a></li>
+	<li style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800"><a href="http://faq.phpwind.net/answer-619" style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800" target="_blank">帮助</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&action=setting" method="post" onSubmit="return submitSearch();">
+<h2>搜索敏感词</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+        <td>
+	       搜索敏感词:
+	       <select name="type" id="type" class="input">
+    		   <option value="0">所有级别</option>
+    		   <option value="1">禁用</option>
+               <option value="2">审核</option>
+               <option value="3">替换</option>
+           </select>
+           <script>getObj("type").value = {$type}</script>
+           &nbsp;
+           <select name="class" id="class" class="input">
+    		   <option value="0">所有分类</option>
+			   <option value="-1">中心词库</option>
+<!--
+EOT;
+foreach($search_class as $key=>$value){
+print <<<EOT
+-->
+				<option value="$key">$value[title]</option>
+<!--
+EOT;
+} print <<<EOT
+-->
+           </select>
+           <script>getObj("class").value = '{$class}'</script>
+		   <input type="text" class="input" name="keyword" id="keyword" value="$keyword" onClick="getSearch();" onBlur="setSearch();"/>
+		<input type="submit" class="btn" value="搜 索" /></td>
+		<td align="right"><input type="button" value="导出词库" onclick="exportClass()" class="btn" /> <input type="button" class="btn" value="导入词库" onclick="importClass();"; />&nbsp;<input type="button" class="btn" value="添加敏感词" onclick="addFilter();"; /></td>
+	</tr>
+</table></form>
+<br />
+
+<div class="fr" style="width:70px; margin:12px 0 0 0"><a class="newcate" href="$basename&action=class" title="管理分类">管理分类</a></div>
+<ul class="nav5  cc wordclasslist ">
+    <li {$show_all}><a href="$basename&action=setting">全部</a></li>
+	<li {$show_center}><a href="$basename&action=setting&show=-1">中心词库</a></li>
+<!--
+EOT;
+foreach($classdb as $key=>$value){
+	$show_class = '';
+	if ($show == $key || $class == $key) $show_class = 'current';
+	$show_class = 'class="word_state'.$value['state'].' '.$show_class.'"';
+	$link_title = $value['state'] ? '' : 'title="该分类已停用"';
+print <<<EOT
+-->
+	<li {$show_class} {$state_style}><a href="$basename&action=setting&show=$key" $link_title>$value[title]</a></li>
+<!--
+EOT;
+} print <<<EOT
+-->
+</ul>
+<div class="cc">$pages</div>
+<div style="font-size:12px;height:28px;line-height:28px;padding:0 8px;border-top:1px dashed #ccc;background:#eee;margin-top:10px;">
+<div class="fr">排序：<a href="javascript:;" onclick="setSort('');">默认</a> <a href="javascript:;" onclick="setSort('word');">敏感词</a> <a href="javascript:;" onclick="setSort('type');">等级</a> <a href="javascript:;" onclick="setSort('class');">分类</a> <a href="javascript:;" onclick="setSort('source');">来源</a></div>
+当前共{$count}个敏感词</div>
+<form name="FORM" action="$basename&action=setting&" method="post">
+<input type="hidden" name="job" value="del" />
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%"><a onclick="CheckAll(document.FORM)" style="cursor:pointer;">全选</a></td>
+		<td width="5%">序号</td>
+		<td width="30%">敏感词</td>
+        <td width="20%">敏感级别</td>
+		<td width="20%">分类</td>
+        <td width="10%">来源</td>
+		<td width="20%" align="center">管理</td>
+	</tr>
+<!--
+EOT;
+$id=($page-1)*$db_perpage;
+foreach($replacedb as $key=>$value){
+$id++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+    <td><input type="checkbox" name="selid[]" value="$key" /></td>
+	<td>$id</td>
+	<td>$value[word]</td>
+	<td><span $value[style]>$value[level]</span></td>
+	<td>$value[class]</td>
+    <td>$value[source]</td>
+	<td>
+	   <a class="fourm-two" href="javascript:;" onclick="editFilter($value[id]);" title="修改"><span class="edit"></span></a>
+       <a class="fourm-two" href="$basename&action=$action&job=del&id=$value[id]&step=2" onclick="return confirm('您确认要刪除吗?');" title="删除"><span class="del"></span></a>
+	</td>
+</tr>
+<!--
+EOT;
+} print <<<EOT
+-->
+</table>
+$pages
+<div class="c"></div>
+<br />
+<div>
+	<input type="button" value="编 辑" onclick="batchEdit();" class="btn" />
+	<input type="button" value="删 除" onclick="delWord();" class="btn" />
+</div>
+</form>
+<br />
+<script language="JavaScript">
+importShow();
+</script>
+<!--
+EOT;
+} elseif ($action == 'class') {
+print <<<EOT
+-->
+<ul class="nav3 cc">
+	<li><a href="$basename&action=scan">扫描帖子</a></li>
+	<li><a href="$basename&action=check">敏感帖审核</a></li>
+    <li><a href="$basename&action=setting" class="two">词库管理</a></li>
+	<li style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800"><a href="http://faq.phpwind.net/answer-619" style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800" target="_blank">帮助</a></li>
+</ul>
+<div class="c"></div>
+<input type="hidden" name="job" value="scan">
+
+<div style="font-size:12px;height:28px;line-height:28px;padding:0 8px;border-top:1px dashed #ccc;background:#eee;margin-top:10px;">
+<div class="fr"><a class="newcate" href="javascript:;" onclick="addClass();" title="新建分类">新建分类</a></div>
+当前共{$count}个分类
+</div>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%">序号</td>
+		<td width="45%">分类名称</td>
+		<td width="10%">词库数量</td>
+        <td width="10%">状态</td>
+		<td width="30%">操作</td>
+	</tr>
+
+<!--
+EOT;
+$id=($page-1)*$db_perpage;
+foreach ($classdb as $value){
+$id++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>{$id}</td>
+		<td><a href="$basename&action=setting&show={$value['id']}">{$value['title']}</a></td>
+		<td>{$value['count']}</td>
+        <td>{$value['status']}</td>
+        <td><a href="javascript:;" onclick="editClass('{$value['id']}');">编辑</a> <a href="javascript:;" onclick="delClass('{$value['id']}');">删除</a> <a href="javascript:;" onclick="exportClass('{$value['id']}')">导出</a> <a href="javascript:;" onclick="switchFilter('{$value['id']}')">{$value['state_button']}</a></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div>
+<!--
+EOT;
+} elseif ($action == 'scan') {
+print <<<EOT
+-->
+<ul class="nav3 cc">
+	<li><a href="$basename&action=scan" class="two">扫描帖子</a></li>
+	<li><a href="$basename&action=check">敏感帖审核</a></li>
+    <li><a href="$basename&action=setting">词库管理</a></li>
+	<li style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800"><a href="http://faq.phpwind.net/answer-619" style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800" target="_blank">帮助</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&action=$action&job=go" method="post">
+<input type="hidden" name="job" value="scan">
+<h2>扫描设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+        <td>
+			扫描内容:
+			<select name="type" id="type">
+				<option value="thread">主题帖</option>
+				<option value="post">回复帖</option>
+			</select>
+			<!--
+			&nbsp;&nbsp;&nbsp;
+			跳词:
+			<select name="skip" id="skip">
+            	<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;
+			简繁转换:
+			<input type="checkbox" name="convert" id="convert" /> 
+            &nbsp;&nbsp;&nbsp;
+            -->
+			<input type="button" class="btn" value="立即扫描" onclick="setScan();"; /></td>
+	</tr>
+</table></form>
+<br />
+
+<h2>扫描记录</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="20%">扫描时间</td>
+		<td width="25%">扫描内容</td>
+		<td>扫描数量</td>
+        <td>待审核</td>
+	</tr>
+
+<!--
+EOT;
+foreach ($dictionarys as $value){
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>{$value['time']}</td>
+		<td>{$value['type']}</td>
+		<td>{$value['num']}</td>
+        <td>{$value['result']}</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div>
+<!--
+EOT;
+} elseif ($action == 'check') {
+    if ($admin_gid == 3 ){
+print <<<EOT
+-->
+<ul class="nav3 cc">
+	<li><a href="$basename&action=scan">扫描帖子</a></li>
+	<li><a href="$basename&action=check" class="two">敏感帖审核</a></li>
+	<li><a href="$basename&action=setting">词库管理</a></li>
+	<li style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800"><a href="http://faq.phpwind.net/answer-619" style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800" target="_blank">帮助</a></li>
+</ul>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename&action=check" class="two">敏感帖审核</a></li>
+</ul>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<div class="c"></div>
+<h2>敏感帖审核</h2>
+<div class="fr" style="width:110px; margin:12px 0 0 0"><a  href="$basename&action=record" title="查看已审核记录">查看已审核记录</a></div>
+<ul class="nav5 cc">
+
+<!--
+EOT;
+if (!$job) {
+print <<<EOT
+-->
+    <li class="current"><a href="$basename&action=check">帖子</a></li>
+	<li><a href="$basename&action=check&job=post" class="two">回复</a></li>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+    <li><a href="$basename&action=check">帖子</a></li>
+	<li class="current"><a href="$basename&action=check&job=post" class="two">回复</a></li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</ul>
+
+<!--
+EOT;
+if(!$job){
+print <<<EOT
+-->
+<div class="cc">$pages</div>
+<form method="post" name="FORM" action="$basename&action=$action">
+<input type="hidden" name="type" value="{$job}">
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%"><a onclick="CheckAll(document.FORM)" style="cursor:pointer;">全选</a></td>
+		<td width="5%">TID</td>
+		<td width="20%">标题</td>
+		<td width="15%">作者</td>
+        <td width="15%">敏感词</td>
+        <td width="15%">发表时间</td>
+		<td width="20%" class="fourm-two">操作</td>
+	</tr>
+<!--
+EOT;
+foreach($check_list as $key=>$value) {
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>
+        	<input name="tid[]" id="tid$value[id]"  type="checkbox" style="display:none" value="$value[tid]" >
+            <input name="pid[]" id="pid$value[id]"  type="checkbox"  value="$value[pid]" onClick="selected($value[id])">
+        </td>
+		<td width="5%"><a href="read.php?tid={$value['tid']}" target="_blank">{$value['tid']}</a></td>
+		<td align="left"><a href="javascript:;" onClick="showContent($value[tid], 0);">{$value['subject']}</a></td>
+		<td>{$value['author']}</td>
+		<td>{$value['filter']}</td>
+		<td>{$value['date']}</td>
+		<td>
+		    <a class="fourm-two" href="$basename&action=$action&job=pass&tid=$value[tid]&pid=0" title="通过审核" onclick="return confirm('您确认要通过吗?');">通过</a>
+            <a class="fourm-two" href="$basename&action=$action&job=del&tid=$value[tid]&pid=0" title="违禁删除" onclick="return confirm('您确认要刪除吗?');">删除</a>
+        </td>
+	</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div><br />
+<center>
+	<b>选中操作:  </b>
+	<input type="radio" name="job" value="pass" class="input" checked /> 通过
+	<input type="radio" name="job" value="del" class="input" /> 删除
+	<br /><br />
+	<input type="button" value="全 选" onclick="CheckAll(document.FORM)" class="btn" />
+	<input type="submit" class="btn" onclick="return confirm('您确认要进行此操作吗?');" value="提 交">
+</center></form>
+<!--
+EOT;
+}else{
+print <<<EOT
+-->
+<div class="cc">$pages</div>
+<form method="post" name="FORM" action="$basename&action=$action">
+<input type="hidden" name="type" value="{$job}">
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%"><a onclick="CheckAll(document.FORM)" style="cursor:pointer;">全选</a></td>
+		<td width="5%">PID</td>
+		<td width="20%">标题</td>
+        <td width="15%">敏感词</td>
+        <td width="15%">发表时间</td>
+		<td width="20%" class="fourm-two">操作</td>
+	</tr>
+<!--
+EOT;
+foreach($check_list as $key=>$value) {
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>
+        	<input name="ptable[$value[id]]" type="hidden" value="$value[ptable]" />
+            <input name="pid[$value[id]]" id="pid$value[id]" type="checkbox" value="$value[pid]" />
+  		</td>
+		<td width="5%"><a href="job.php?action=topost&tid={$value['tid']}&pid={$value['pid']}" target="_blank">{$value['pid']}</a></td>
+		<td align="left"><a href="javascript:;" onClick="showContent($value[tid], $value[pid]);">{$value['subject']}</a></td>
+		<td>{$value['filter']}</td>
+		<td>{$value['date']}</td>
+		<td>
+		    <a class="fourm-two" href="$basename&action=$action&job=pass&id=$value[id]&tid=$value[tid]&pid=$value[pid]&ptable=$value[ptable]&type=post" title="通过审核" onclick="return confirm('您确认要通过吗?');">通过</a>
+            <a class="fourm-two" href="$basename&action=$action&job=del&tid=$value[tid]&pid=$value[pid]&ptable=$value[ptable]&type=post" title="违禁删除" onclick="return confirm('您确认要通过吗?');">删除</a>
+        </td>
+	</tr>
+
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div>
+<center>
+	<b>选中操作:  </b>
+	<input type="radio" name="job" value="pass" class="input" checked /> 通过
+	<input type="radio" name="job" value="del" class="input" /> 删除
+	<br /><br />
+	<input type="button" value="全 选" onclick="CheckAll(document.FORM)" class="btn" />
+	<input type="submit" class="btn" onclick="return confirm('您确认要进行此操作吗?');" value="提 交">
+</center></form>
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--
+EOT;
+} if ($action == 'record') {
+print <<<EOT
+-->
+<ul class="nav3 cc">
+	<li><a href="$basename&action=scan">扫描帖子</a></li>
+	<li><a href="$basename&action=check" class="two">敏感帖审核</a></li>
+	<li><a href="$basename&action=setting">词库管理</a></li>
+	<li style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800"><a href="http://faq.phpwind.net/answer-619" style="border:none;padding-left:0;padding-right:0; background:none;text-decoration:underline;color:#008800" target="_blank">帮助</a></li>
+</ul>
+<div class="c"></div>
+
+<!--
+EOT;
+if (!$job) {
+print <<<EOT
+-->
+<div style="font-size:12px;height:28px;line-height:28px;padding:0 8px;border-top:1px dashed #ccc;background:#eee;margin-top:10px;">
+<div class="fr">排序：<a href="$basename&action=record&job={$job}&sort=pf.updated_at">默认</a> <a href="$basename&action=record&job={$job}&sort=pt.subject">标题</a>  <a href="$basename&action=record&job={$job}&sort=pt.author">作者</a>  <a href="$basename&action=record&job={$job}&sort=pf.updated_at">审核时间</a>  <a href="$basename&action=record&job={$job}&sort=pf.assessor">审核人员</a></div>
+共{$count}条审核记录
+</div>
+<ul class="nav5  cc">
+    <li class="current"><a href="$basename&action=record">帖子</a></li>
+	<li><a href="$basename&action=record&job=post" class="two">回复</a></li>
+</ul>
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%">序号</td>
+		<td width="30%">标题</td>
+		<td width="10%">作者</td>
+        <td width="10%">状态</td>
+        <td width="10%">审核员</td>
+        <td width="15%">操作时间</td>
+	</tr>
+<!--
+EOT;
+$idnum = ($page-1)*$db_perpage;
+foreach($record_list as $key=>$value) {
+$idnum++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td width="5%">{$idnum}</td>
+		<td width="30%"><a href="javascript:;" onClick="showContent($value[tid], 0, '{$value['filter']}');">{$value['subject']}</a></td>
+		<td width="10%">{$value['author']}</td>
+        <td width="10%">{$value['operate']}</td>
+		<td width="10%">{$value['assessor']}</td>
+		<td width="15%">{$value['date']}</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+<div style="font-size:12px;height:28px;line-height:28px;padding:0 8px;border-top:1px dashed #ccc;background:#eee;margin-top:10px;">
+<div class="fr">排序：<a href="$basename&action=record&job={$job}&sort=pf.updated_at">默认</a> <a href="$basename&action=record&job={$job}&sort=pt.subject">标题</a>  <a href="$basename&action=record&job={$job}&sort=pf.updated_at">审核时间</a>  <a href="$basename&action=record&job={$job}&sort=pf.assessor">审核人员</a></div>
+共{$count}条审核记录
+</div>
+<ul class="nav5  cc">
+     <li><a href="$basename&action=record">帖子</a></li>
+	<li class="current"><a href="$basename&action=record&job=post" class="two">回复</a></li>
+</ul>
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%">序号</td>
+		<td width="30%">标题</td>
+        <td width="10%">状态</td>
+        <td width="10%">审核员</td>
+        <td width="15%">操作时间</td>
+	</tr>
+<!--
+EOT;
+$idnum = ($page-1)*$db_perpage;
+foreach($record_list as $key=>$value) {
+$idnum++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td width="5%">{$idnum}</td>
+		<td width="30%"><a href="javascript:;" onClick="showContent($value[tid], $value[pid], '{$value['filter']}');">{$value['subject']}</a></td>
+        <td width="10%">{$value['operate']}</td>
+		<td width="10%">{$value['assessor']}</td>
+		<td width="15%">{$value['date']}</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<div class="cc">$pages</div>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,309 @@
+<!--<?php
+print <<<EOT
+-->
+<style type="text/css">
+<!--
+.STYLE3 {color: #000000}
+-->
+</style>
+<div id="breadCrumb">
+<table width='100%' cellspacing=0 cellpadding=0 align=center><tr>
+  <td align=left>
+<img src='$imgpath/$stylepath/index/home.gif' align=absbottom> 
+<b><a href='$db_bfn'>$db_bbsname </a>  &raquo; <a href="$basename">海底大探宝</a></b></td>
+</tr></table><br/></div>
+
+<div>
+<table width='100%' cellpadding="4" align="center" cellspacing="1" $i_table>
+<tr>
+     <td width='20%' valign="top">
+
+<div class="t">
+<table width=100% align="center" cellpadding=0 cellspacing=0 $i_table>
+      <tr>
+        <td class="h" align="center">个人资料</td>
+      </tr>
+<tr class='tr3 f_one'><td valign="top">
+
+<!--
+EOT;
+if($groupid=="guest"){
+print <<<EOT
+-->
+
+<div align="center">
+游客<br><br>
+$userface<br><br>
+请先登录,再来探宝
+</div>
+
+<!--
+EOT;
+}else{print <<<EOT
+-->
+
+<strong>
+<!--
+EOT;
+if($userdb['groupid']==3){
+print <<<EOT
+-->
+<div align="center" style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FILTER: glow(color=red,strength=4); PADDING-BOTTOM: 1px; COLOR: white; PADDING-TOP: 1px; HEIGHT: 16px">$userdb[username]</font><br><br>
+<!--
+EOT;
+}elseif($userdb['groupid']==4){
+print <<<EOT
+-->
+<div align="center" style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FILTER: glow(color=orangered,strength=4); PADDING-BOTTOM: 1px; COLOR: white; PADDING-TOP: 1px; HEIGHT: 16px">$userdb[username]</div><br><br><!--
+EOT;
+}elseif($userdb['groupid']==5){
+print <<<EOT
+-->
+<div align="center" style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FILTER: glow(color=royalblue,strength=4); PADDING-BOTTOM: 1px; COLOR: white; PADDING-TOP: 1px; HEIGHT: 16px">$userdb[username]</div><br><br><!--
+EOT;
+}elseif($userdb['groupid']==16){
+print <<<EOT
+-->
+<div align="center" style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FILTER: glow(color=deeppink,strength=4); PADDING-BOTTOM: 1px; COLOR: white; PADDING-TOP: 1px; HEIGHT: 16px">$userdb[username]</div><br><br><!--
+EOT;
+}else {
+print <<<EOT
+-->
+<div align="center" style="PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FILTER: glow(color=black,strength=4); PADDING-BOTTOM: 1px; COLOR: white; PADDING-TOP: 1px; HEIGHT: 16px">$userdb[username]</div><br><br>
+<!--
+EOT;
+}print <<<EOT
+-->
+</strong>
+</td></tr>
+<tr class='tr3 f_one'><td>
+级别：初级探险家</td></tr>
+<tr class='tr3 f_one'><td>
+</td></tr>
+<tr class='tr3 f_one'><td>
+{$credit->cType[money]}: $userdb[money] {$credit->cUnit[money]}</td></tr>
+
+<!--
+EOT;
+foreach($_CREDITDB as $key => $value){
+$usercredit = $creditdb ? $creditdb[$key][1] : 0;
+print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--
+EOT;
+}print <<<EOT
+-->
+
+</td></tr>
+</table></div>
+
+<div class="t">
+<table width=100% align="center" cellpadding=0 cellspacing=0 $i_table>
+<tr>
+    <td class="h" align="center" colspan="2">已探知获取宝物</td>
+</tr>
+<tr class="tr2">
+		<td width="50%">宝物种类</td>
+		<td>统计</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />海马</td>
+   <td>$fish1</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />大白鲨</td>
+   <td>$fish2</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />驼背鲸</td>
+   <td>$fish3</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />金鱼</td>
+   <td>$fish4</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />食人鱼</td>
+   <td>$fish5</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />比目鱼</td>
+   <td>$fish6</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />鳄鱼</td>
+   <td>$fish7</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />南海II号宝船</td>
+   <td>$fish8</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />美人鱼</td>
+   <td>$fish9</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />深海乌贼</td>
+   <td>$fish10</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />剧毒海蜇</td>
+   <td>$fish11</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />珊瑚礁</td>
+   <td>$fish12</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />珍珠</td>
+   <td>$fish13</td>
+</tr>
+<tr class='f_one'>
+   <td><img align="absmiddle" src="$imgpath/$stylepath/cate_on.gif" />海怪</td>
+   <td>$fish14</td>
+</tr>
+</table></div>
+<div class="t">
+<table width=100% align="center" cellpadding=3 cellspacing=1 $i_table>
+      <tr>
+        <td class="h" align="center">版权</td>
+      </tr>
+<tr><td>原作者&nbsp;:&nbsp;jackeye <br/>友情升级：&nbsp;【恋之Q宠家族】<br/>支持版本7.32<br/>版本&nbsp;:&nbsp;海底探宝PW7.32版&nbsp;</td></tr>
+</table></div>
+
+
+
+    </td>
+    <td width='80%' valign="top">
+
+
+<div class="t">
+<table width=100% align="center" cellpadding=0 cellspacing=0 $i_table>
+<tr>
+    <td class="h" align="center" colspan="10"><div align="center">探宝前十名&nbsp;&nbsp;$uptime</div></td>
+</tr>
+<tr class="tr2" align="center">
+		<td width="10%">探宝家</td>
+                <td>海马</td>
+                <td>驼背鲸</td>
+                <td>金鱼</td>
+                <td>比目鱼</td>
+                <td>南海II号</td>
+                <td>美人鱼</td>
+                <td>珊瑚礁</td>
+		        <td>珍珠</td>
+		        <td>统计</td>
+</tr>
+$hotposts
+</table></div>
+
+
+<div class="t">
+<table width=100% align="center" cellpadding=0 cellspacing=0 $i_table>
+<tr>
+    <td class="h" align="center" colspan="9"><div align="center">收藏家来收宝物啦！下面是当前宝物兑换金额</div></td>
+</tr>
+<tr class="tr2" align="center">
+                <td bgcolor="#999999">海马</td>
+                <td bgcolor="#999999">大白鲨</td>
+                <td bgcolor="#999999">驼背鲸</td>
+                <td bgcolor="#999999">金鱼</td>
+                <td bgcolor="#999999">食人鱼</td>
+                <td bgcolor="#999999">比目鱼</td>
+                <td bgcolor="#999999">鳄鱼</td>
+</tr>
+<tr class="f_one" align="center">
+                <td><img src="$hkimg/1.gif" width=50 height=60></td>
+                <td><img src="$hkimg/2.gif" width=50 height=60></td>
+                <td><img src="$hkimg/3.gif" width=50 height=60></td>
+                <td><img src="$hkimg/4.gif" width=50 height=60 /></td>
+                <td><img src="$hkimg/5.gif" width=50 height=60></td>
+                <td><img src="$hkimg/6.gif" width=50 height=60></td>
+                <td><img src="$hkimg/7.gif" width=50 height=60></td>
+</tr>
+<tr class="f_one" align="center">
+                <td>增加 $fish1money 论坛币</td>
+                <td>减少 $fish2money 论坛币</td>
+                <td>增加 $fish3money 论坛币</td>
+                <td>增加 $fish4money 论坛币</td>
+                <td>减少 $fish5money 论坛币</td>
+                <td>增加 $fish6money 论坛币</td>
+                <td>减少 $fish7money 论坛币</td>
+</tr>
+<tr class="tr2" align="center">
+  <td bgcolor="#999999"><span class="#999999">南海II号</span></td>
+  <td bgcolor="#999999"><span class="#999999">美人鱼</span></td>
+  <td bgcolor="#999999"><span class="#999999">深海乌贼</span></td>
+  <td bgcolor="#999999"><span class="#999999">剧毒海蜇</span></td>
+  <td bgcolor="#999999"><span class="#999999">珊瑚礁</span></td>
+  <td bgcolor="#999999"><span class="#999999">珍珠</span></td>
+  <td bgcolor="#999999"><span class="#999999">海怪</span></td>
+</tr>
+<tr class="f_one" align="center">
+  <td><img src="$hkimg/8.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/9.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/10.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/11.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/12.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/13.jpg" width="50" height="60" /></td>
+  <td><img src="$hkimg/14.jpg" width="50" height="60" /></td>
+</tr>
+<tr class="f_one" align="center">
+  <td>增加 $fish8money 论坛币</td>
+  <td>增加 $fish9money 论坛币</td>
+  <td>减少 $fish10money 论坛币</td>
+  <td>减少 $fish11money 论坛币</td>
+  <td>增加 $fish12money 论坛币</td>
+  <td>增加 $fish13money 论坛币</td>
+  <td>减少 $fish14money 论坛币</td>
+</tr>
+</table>
+</div>
+
+<div class="t">
+<table width=100% align="center" cellpadding=0 cellspacing=0 $i_table>
+<tr>
+    <td class="h" align="center" ><div align="center">海底大探宝之探宝秘籍</div></td>
+</tr>
+<tr>
+    <td class="f_one" height=60 valign="top">
+    *&nbsp;既然你到了这里，管理员肯定是给你了藏宝图，对不对需要自己判断，那你就出海吧！<br/>
+    *&nbsp;按照收藏家出的价格，所得宝物对照增加财富<br/>
+    *&nbsp;一旦在探宝过程中发生意外..就会受伤必须休息&nbsp;$vtime&nbsp;分钟,才能继续探宝之旅！<br/>
+	*&nbsp;一旦在探宝过程中发生意外..就会受伤必须休息&nbsp;$vtime&nbsp;分钟,才能继续探宝之旅！<br/>
+	*&nbsp;一旦在探宝过程中发生意外..就会受伤必须休息&nbsp;$vtime&nbsp;分钟,才能继续探宝之旅！<br/>
+	*&nbsp;一旦在探宝过程中发生意外..就会受伤必须休息&nbsp;$vtime&nbsp;分钟,才能继续探宝之旅！<br/>
+	*&nbsp;一旦在探宝过程中发生意外..就会受伤必须休息&nbsp;$vtime&nbsp;分钟,才能继续探宝之旅！<br/>
+    </td>
+</tr>
+<tr>
+    <td class="f_one"  align="center" ><input type=button value='准备好了，就从这里开始探宝吧！' class="btn" onclick=location.href='$basename&action=click'>
+    <br/></td>
+</tr>
+</table></div>
+
+
+
+
+
+    </td>
+</tr>
+
+</table></div>
+
+
+
+    </td>
+</tr>
+
+</table></div>
+
+
+<!--
+EOT;
+?>-->

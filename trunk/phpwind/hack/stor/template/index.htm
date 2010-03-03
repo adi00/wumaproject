@@ -1,0 +1,230 @@
+<!--********************************
+可修改项目行数分别在167至183行，191行修改时参考注释
+**********************************-->
+<!--<?php
+print <<<EOT
+-->
+<style type="text/css">
+<!--
+.nomoney
+{
+margin:10px 0px ;
+padding:10px 15px  ;
+border: 1px solid gray ;
+width:500px;
+color:orange;
+font-size:14px;
+}
+
+.costmsg
+{
+margin:10px 0px ;
+padding:10px 10px  ;
+border: 1px solid gray ;
+width:500px;
+}
+
+.cost
+{
+color:darkorange;
+font-size:17px;
+margin:0px 35px 0px 0px;
+border-style: outset ;
+width:200px;
+}
+
+.buy
+{
+color:darkorange;
+font-size:17px;
+margin:0px 5px 0px 0px;
+border-style: outset ;
+width:200px;
+}
+
+.msg
+{
+margin:10px 0px ;
+padding:10px 10px  ;
+border: 1px solid gray ;
+width:750px;
+color:orange;
+font-size:14px;
+}
+.msg span
+{
+margin:0px 5px ;
+}
+.button
+{
+margin:10px 10px 20px;
+}
+.line
+{
+background:bisque;
+height:1px;
+width:770px;
+
+}
+.tool
+{
+margin:10px 10px;
+}
+.tool2
+{
+margin:10px 10px 0px;
+}
+
+.food
+{
+margin:10px 10px ;
+}
+.food2
+{
+margin:10px 10px ;
+}
+.getgold
+{
+margin:10px 10px ;
+}
+.getgold2
+{
+margin:10px 10px ;
+}
+.tt1
+{
+float:left;
+margin: 0px 30px 0px 0px;
+width:250px;
+}
+.tt3
+{
+float:left;
+margin: 0px 30px 0px 0px;
+width:247px;
+}
+.topmsg
+{
+margin:10px 0px ;
+padding:10px 10px  ;
+border: 1px solid gray ;
+width:750px;
+color:orange;
+font-size:14px;
+}
+.topmsg1
+{
+margin:10px 0px ;
+padding:10px 10px  ;
+border: 1px solid gray ;
+width:750px;
+color:black;
+font-size:13px;
+line-height:25px;
+}
+.topmsg1 a
+{
+color:#CC6600;
+}
+.msg1
+{
+width:200px;
+font-size:13px;
+margin-top:-260px;
+border-style: outset ;
+float:right;
+}
+
+-->
+</style>
+<div class="msg1">
+<table>
+<tr>
+<td>请多多帮助别人，这样才能得到别人的帮助！<br>
+作者：阿诺 <a href="http://bbs.qipao8.com/">起跑网路</a>
+<br/><font color=green>修正：phpwind&raquo;<a href="http://www.xihu8.com/" target="_blank" title="2009/5/6">NEWYOND</a></font>
+</td>
+</tr></table>
+</div>
+
+
+<!--
+EOT;
+session_start();
+$ss=$_SESSION['count']=rand(1000,99999);
+if($tname!='' and $tgid!='' and $playershop==''){
+if($repair!=''){
+print
+<<<EOT
+-->
+<table ><tr><td>
+<form method="post" action="hack.php?H_name=stor">
+<input type="hidden" name="sjss" value="$ss"/>
+<input type="hidden" name="help" value="eat"/>
+<input type="hidden" name="repairid" value="$repair"/>
+<input type="image" src="hack/stor/image/eat.jpg" alt="点击，请他大吃一顿"/><br>点图，拿出你的食物，请朋友大吃一顿
+</form>
+</td>
+<td width=50>&nbsp;</td>
+<td>
+<form method="post" action="hack.php?H_name=stor">
+<input type="hidden" name="sjss" value="$ss"/>
+<input type="hidden" name="help" value="mend"/>
+<input type="hidden" name="repairid" value="$repair"/>
+<input type="image" src="hack/stor/image/mend.jpg" alt="点击，帮他修理工具"/><br>点图，用你的体力为朋友修理工具
+</form>
+</td></tr></table>
+<!--
+EOT;
+}else{
+print
+<<<EOT
+-->
+<form method="post" action="hack.php?H_name=stor">
+<input type="hidden" name="sjss" value="$ss"/>
+<input type="text" name="msg" size="80" maxlength="25"/>
+<input type="submit" value="留言"/>（消耗体力1点）
+</form>
+<form method="post" action="hack.php?H_name=stor">
+<div class="shop">
+<div class="tool">工具类</div>
+<div class="tool2">
+<input type="hidden" name="sjss" value="$ss"/>
+<!--道具效果及价格前台显示部分开始-->
+<div class="tt1"><input type="radio" name="tool" value="木镐"/>木镐|耐久+10（零售价$creditdb[name]10$creditdb[unit]）</div>
+<div class="tt1"><input type="radio" name="tool" value="铁镐"/>铁镐|耐久+20（零售价$creditdb[name]20$creditdb[unit]）</div>
+<div class="tt2"><input type="radio" name="tool" value="铜镐"/>铜镐|耐久+30（零售价$creditdb[name]30$creditdb[unit]）</div>
+<div class="tt3"><input type="radio" name="tool" value="银镐"/>银镐|耐久+40（零售价$creditdb[name]40$creditdb[unit]）</div>
+<div class="tt4"><input type="radio" name="tool" value="金镐"/>金镐|耐久+50（零售价$creditdb[name]500$creditdb[unit]）</div>
+</div>
+<div class="button"><input type="submit" value="购买工具"/></div>
+<div class="line">&nbsp;</div>
+<div class="food">食品类</div>
+<div class="food2">
+<div class="tt1"><input type="radio" name="tool" value="馍馍"/>馍馍|体力+100（零售价$creditdb[name]10$creditdb[unit]）</div>
+<div class="tt1"><input type="radio" name="tool" value="白米饭"/>白米饭|体力+200（零售价$creditdb[name]20$creditdb[unit]）</div>
+<div class="tt2"><input type="radio" name="tool" value="蛋炒饭"/>蛋炒饭|体力+300（零售价$creditdb[name]30$creditdb[unit]）</div>
+<div class="tt3"><input type="radio" name="tool" value="盖浇饭"/>盖浇饭|体力+400（零售价$creditdb[name]40$creditdb[unit]）</div>
+<div class="tt4"><input type="radio" name="tool" value="胶原猪脚"/>胶原猪脚|体力+500（零售价$creditdb[name]50$creditdb[unit]）</div>
+<!--道具效果及价格前台显示部分结束-->
+</div>
+<div class="button"><input type="submit" value="购买食品"/></div>
+</div>
+</form>
+<div class="line">&nbsp;</div>
+<form method="post" action="hack.php?H_name=stor">
+
+<div class="getgold">金矿提炼（3000公斤金矿提炼1$creditdb[unit]$creditdb[name]）</div><!--显示黄金提炼信息10000金矿对1黄金-->
+<div class="getgold2">
+<input type="hidden" name="sjss" value="$ss"/>
+<input type="hidden" name="dhgold" value="炼金"/>
+</div>
+<div class="button"><input type="submit" value="提炼金矿"/></div>
+</form>
+<div class="line">&nbsp;</div>
+
+
+<!--
+EOT;
+}}
+?>-->

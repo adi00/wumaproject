@@ -1,0 +1,46 @@
+<!--
+<?php
+
+if (empty($block_data['height'])) {
+	$block_data['height'] = 200;
+}
+
+if ('show' == $block_job) {
+print <<<EOT
+-->
+<div class="fl" style="width:100%;">
+	<iframe name="block_{$block_id}_iframe" id="block_{$block_id}_iframe" height="{$block_data[height]}" frameborder="0" allowtransparency="yes" marginheight="0" marginwidth="0" border="0" style="width:100%;float:left;" src="apps.php?q=stopic&job=showtpc&tid={$block_data[tid]}"></iframe>
+</div>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+
+<tbody>
+
+	<tr>
+        	<td width="80">模块名称：</td>
+            <td><input type="text" name="block_title" value="$block[title]" class="input"></td>
+	</tr>
+	<tr>
+        	<td>主题类别：</td>
+            <td>
+	            	目前支持的类别有：投票、辩论、团购/活动
+            </td>
+	</tr>
+	<tr>
+        	<td>主题ID：</td>
+            <td><input name="tid" type="text" class="input" value="{$block_data[tid]}" /></td>
+	</tr>
+	<tr>
+        	<td>窗口高度：</td>
+            <td><input name="height" type="text" class="input" size="5" value="{$block_data[height]}" />px</td>
+	</tr>
+</tbody>
+
+<!--
+EOT;
+}
+?>
+-->

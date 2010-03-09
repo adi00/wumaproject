@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `pw_teamtasks`(
 	`tid` int(10) unsigned not null auto_increment,
 	`pid` int(10) unsigned not null default 0,
+	`taskname` char(30) not null,
 	`priority` tinyint(1) unsigned not null default 0,
 	`owner` char(15) not null,
 	`owner_id` mediumint(8) unsigned not null,

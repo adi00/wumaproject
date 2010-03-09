@@ -1,15 +1,15 @@
 <!--********************************
-¿ÉĞŞ¸ÄÏîÄ¿ĞĞÊı·Ö±ğÔÚ88,104,105£¬ĞŞ¸ÄÊ±²Î¿¼×¢ÊÍ
+å¯ä¿®æ”¹é¡¹ç›®è¡Œæ•°åˆ†åˆ«åœ¨88,104,105ï¼Œä¿®æ”¹æ—¶å‚è€ƒæ³¨é‡Š
 **********************************-->
 <?php
 !function_exists('readover') && exit('Forbidden');
 ?>
 <div id="breadCrumb">
-		<img src="<?php echo $imgpath?>/<?php echo $stylepath?>/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="<?php echo $db_bfn?>" title="<?php echo $db_bbsname?>"><?php echo $db_bbsname?></a> &raquo; <a href="hack.php?H_name=gold">¡º»Æ½ğ¿ó³¡¡»</a>
+		<img src="<?php echo $imgpath?>/<?php echo $stylepath?>/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="<?php echo $db_bfn?>" title="<?php echo $db_bbsname?>"><?php echo $db_bbsname?></a> &raquo; <a href="hack.php?H_name=gold">ã€é»„é‡‘çŸ¿åœºã€</a>
 </div>
 <div class="t"><table width="100%" align="center" cellspacing="0" cellpadding="0">
-<tr><td class="h"><b>ÌÔ½ğµ¼º½£º <a href="hack.php?H_name=gold">¡º»Æ½ğ¿ó³¡¡»</a>
-<a href="hack.php?H_name=stor">¡ºÌÔ½ğÉÌÒµ½Ö¡»</a>
+<tr><td class="h"><b>æ·˜é‡‘å¯¼èˆªï¼š <a href="hack.php?H_name=gold">ã€é»„é‡‘çŸ¿åœºã€</a>
+<a href="hack.php?H_name=stor">ã€æ·˜é‡‘å•†ä¸šè¡—ã€</a>
 </b></td></tr>
 <tr class="tr3 f_one trbor"><td valign="top">
 <?php
@@ -48,7 +48,7 @@ class gold{
 		$this->hrow=$this->db->fetch_array($result);
 		}
 		else{
-		echo"È¡µÃ·ÖÊıÊ§°Ü";
+		echo"å–å¾—åˆ†æ•°å¤±è´¥";
 		}
 	}
 
@@ -59,7 +59,7 @@ class gold{
 		$this->vrow=$this->db->fetch_array($vresult);
 		}
 		else{
-		echo"È¡µÃ·ÖÊıÊ§°Ü";
+		echo"å–å¾—åˆ†æ•°å¤±è´¥";
 		}
 	}
 
@@ -68,11 +68,11 @@ class gold{
 		$this->getvalue();
 		if($this->gcid=='')
 	      {
-			echo"<p class=\"undefine\">BBSºóÌ¨»¹Î´Ìí¼ÓÓÎÏ·×Ô¶¨Òå»ı·Ö£¬ÎŞ·¨²ÎÓë»ı·ÖÅÅĞĞ°ñ£¬ÇëÁªÏµ¹ÜÀíÔ±</p>";
+			echo"<p class=\"undefine\">BBSåå°è¿˜æœªæ·»åŠ æ¸¸æˆè‡ªå®šä¹‰ç§¯åˆ†ï¼Œæ— æ³•å‚ä¸ç§¯åˆ†æ’è¡Œæ¦œï¼Œè¯·è”ç³»ç®¡ç†å‘˜</p>";
 	      }
 		elseif($this->vrow['value']=='' and $this->name1 != '')
 		  {
-			$value=1; //ÉèÖÃÊ×´Î½øÈëÌÔ½ğµÄ³õÊ¼»Æ½ğÊıÁ¿£¬ÈçÕûºÏPK²å¼ş£¬ÇëÓëPKÉèÖÃÒ»Ñù¡£
+			$value=1; //è®¾ç½®é¦–æ¬¡è¿›å…¥æ·˜é‡‘çš„åˆå§‹é»„é‡‘æ•°é‡ï¼Œå¦‚æ•´åˆPKæ’ä»¶ï¼Œè¯·ä¸PKè®¾ç½®ä¸€æ ·ã€‚
 			$vsql = "INSERT INTO pw_membercredit (uid,cid,value) VALUES('$this->gid','$this->gcid','$value')";
 			$this->db->query($vsql);
 		  }
@@ -87,18 +87,18 @@ class gold{
 		  {
 			$gscore=0;
 			$gallscore=0;
-			$gtool=10;  //ÉèÖÃÊ×´Î½øÈëÌÔ½ğµÄ³õÊ¼¹¤¾ßÄÍ¾ÃÖµ
-			$ghealth=60; //ÉèÖÃÊ×´Î½øÈëÌÔ½ğµÄ³õÊ¼ÌåÁ¦Öµ
-			$msg='ÎÒÀ´ÌÔ½ğÀ²~£¡';
+			$gtool=10;  //è®¾ç½®é¦–æ¬¡è¿›å…¥æ·˜é‡‘çš„åˆå§‹å·¥å…·è€ä¹…å€¼
+			$ghealth=60; //è®¾ç½®é¦–æ¬¡è¿›å…¥æ·˜é‡‘çš„åˆå§‹ä½“åŠ›å€¼
+			$msg='æˆ‘æ¥æ·˜é‡‘å•¦~ï¼';
 			$time=date("YmdHis");
-			$sql2 = "INSERT INTO pw_gold (id,name,toolname,tool,health,score,allscore,msg,time) VALUES('$this->gid','$this->name1','Ä¾¸ä','$gtool','$ghealth','$gscore','$gallscore','$msg','$time')";
+			$sql2 = "INSERT INTO pw_gold (id,name,toolname,tool,health,score,allscore,msg,time) VALUES('$this->gid','$this->name1','æœ¨é•','$gtool','$ghealth','$gscore','$gallscore','$msg','$time')";
 			if($this->db->query($sql2))
 			  {
-				//echo"Ìí¼Ó³É¹¦";
+				//echo"æ·»åŠ æˆåŠŸ";
 			  }
 			  else
 			  {
-				  echo"Ìí¼ÓÊ§°Ü";
+				  echo"æ·»åŠ å¤±è´¥";
 			  }
           }
 	}
@@ -115,38 +115,38 @@ class gold{
 	$level=ceil($sscore/10000);
 	switch($sscore){
 			case  $sscore <=7000:
-				$dj='Ğ¡Ê¯Á£';
+				$dj='å°çŸ³ç²’';
 			break;
 			case  $sscore <=14000:
-				$dj='¶ìÂÑÊ¯';
+				$dj='é¹…åµçŸ³';
 			break;
 			case  $sscore <=21000:
-				$dj='Ê¯Ó¢Ê¯';
+				$dj='çŸ³è‹±çŸ³';
 			break;
 			case  $sscore <=28000:
-				$dj='ºº°×Óñ';
+				$dj='æ±‰ç™½ç‰';
 			break;
 			case  $sscore <=35000:
-				$dj='Òø¿é';
+				$dj='é“¶å—';
 			break;
 			case  $sscore <=42000:
-				$dj='ôä´ä';
+				$dj='ç¿¡ç¿ ';
 			break;
 			case  $sscore <=49000:
-				$dj='Âêè§';
+				$dj='ç›ç‘™';
 			break;
 			case  $sscore <=56000:
-				$dj='½ğ×©';
+				$dj='é‡‘ç –';
 			break;
 			case  $sscore <=63000:
-				$dj='»ğ×ê';
+				$dj='ç«é’»';
 			break;
 			case  $sscore <=170000:
-				$dj='Óî¹âÊ¯';
+				$dj='å®‡å…‰çŸ³';
 			break;
 		}
 
-	echo"<div class=\"user123\">ÌÔ½ğÕß£º{$this->name1} &nbsp;&nbsp;×î¸ß½ğ¿ó²úÁ¿£º{$sscore}¹«½ï&nbsp;&nbsp;½ğ¿ó´¢±¸Á¿£º{$allsscore}¹«½ï&nbsp;&nbsp;µÈ¼¶£º{$level}¼¶{$dj}&nbsp;&nbsp;ÌåÁ¦£º{$health}Å£&nbsp;&nbsp;¹¤¾ß£º{$toolname}&nbsp;&nbsp;ÄÍ¾Ã¶È£º{$tool}¶È</div>";
+	echo"<div class=\"user123\">æ·˜é‡‘è€…ï¼š{$this->name1} &nbsp;&nbsp;æœ€é«˜é‡‘çŸ¿äº§é‡ï¼š{$sscore}å…¬æ–¤&nbsp;&nbsp;é‡‘çŸ¿å‚¨å¤‡é‡ï¼š{$allsscore}å…¬æ–¤&nbsp;&nbsp;ç­‰çº§ï¼š{$level}çº§{$dj}&nbsp;&nbsp;ä½“åŠ›ï¼š{$health}ç‰›&nbsp;&nbsp;å·¥å…·ï¼š{$toolname}&nbsp;&nbsp;è€ä¹…åº¦ï¼š{$tool}åº¦</div>";
 	}
 
 	function tongbu(){
@@ -166,23 +166,23 @@ class gold{
 		$sqlscore = "SELECT name,score FROM pw_gold  ORDER BY score DESC  LIMIT 0 , 10 ";
 		$resultscore = $this->db->query($sqlscore);
 		echo"<div class=\"toparae\">";
-		echo"<div class=\"topgold\"> <h3>ÌÔ½ğ¸ßÊÖÅÅĞĞ°ñ</h3><br>";
+		echo"<div class=\"topgold\"> <h3>æ·˜é‡‘é«˜æ‰‹æ’è¡Œæ¦œ</h3><br>";
 		while($result=$this->db->fetch_array($resultscore)){
 			$user1=$result['name'];
 			$score=$result['score'];
-			echo" <span>{$user1}</span>£º½ğ¿ó $score ¹«½ï<img src=\".\hack\gold\image\gold.jpg\"><br>";
+			echo" <span>{$user1}</span>ï¼šé‡‘çŸ¿ $score å…¬æ–¤<img src=\".\hack\gold\image\gold.jpg\"><br>";
 		}
 		echo"</div>";
 
 
 			$sqlallscore = "SELECT name,money FROM pw_gold  ORDER BY money DESC  LIMIT 0 , 10";
 			$resultallscore = $this->db->query($sqlallscore);
-			echo"<div class=\"topallgold\"> <h3>ÌÔ½ğ¸»ÎÌÅÅĞĞ°ñ</h3><br>";
+			echo"<div class=\"topallgold\"> <h3>æ·˜é‡‘å¯Œç¿æ’è¡Œæ¦œ</h3><br>";
 			while($resultall=$this->db->fetch_array($resultallscore))
 			{
 				$user2=$resultall['name'];
 				$gmoney=$resultall['money'];
-				echo"<span>{$user2}</span> £º$creditdb[name] $gmoney $creditdb[unit]<img src=\".\hack\gold\image\gold.jpg\"><br>";
+				echo"<span>{$user2}</span> ï¼š$creditdb[name] $gmoney $creditdb[unit]<img src=\".\hack\gold\image\gold.jpg\"><br>";
 			}
 			echo"</div></div>";
 	}
@@ -195,23 +195,23 @@ $a=new gold($ngid,$nname,$db);
 $tcid=$a->getcid();
 $creditdb=$db->get_one("SELECT * FROM pw_credits WHERE cid=".pwEscape($tcid));
 //$creditdb['name']
-$a->oc==0 && showmsg('²å¼şÒÑ¹Ø±Õ');
+$a->oc==0 && showmsg('æ’ä»¶å·²å…³é—­');
 $a->inset_first_value();
 $a->inset_first_point();
 $wquery = "SELECT health,tool,toolname FROM pw_gold where id='$ngid' ";
 $wresult = $db->query($wquery);
 $wrow=$db->fetch_array($wresult);
 if($wrow['health']<5 or $wrow['toolname']==''){
-	showmsg("ÄãÒÑ¾­ÌåÁ¦²»Ö§»ò¹¤¾ßÑÏÖØÆÆËğ£¬²»ÄÜÔÙÍÚ½ğÁË£¬<a href=hack.php?H_name=stor >ÌÔ½ğÉÌÒµ½Ö</a>×ª×ª°É£¡");
+	showmsg("ä½ å·²ç»ä½“åŠ›ä¸æ”¯æˆ–å·¥å…·ä¸¥é‡ç ´æŸï¼Œä¸èƒ½å†æŒ–é‡‘äº†ï¼Œ<a href=hack.php?H_name=stor >æ·˜é‡‘å•†ä¸šè¡—</a>è½¬è½¬å§ï¼");
 }else{
 	$a->putout_user_msg();
 	$ntoolname=$wrow['toolname'];
 	switch($ntoolname){
-		case Ä¾¸ä : $swf='kg1.swf';break;
-		case Ìú¸ä : $swf='kg2.swf';break;
-		case Í­¸ä : $swf='kg3.swf';break;
-		case Òø¸ä : $swf='kg4.swf';break;
-		case ½ğ¸ä : $swf='kg5.swf';break;
+		case 'æœ¨é•' : $swf='kg1.swf';break;
+		case 'é“é•' : $swf='kg2.swf';break;
+		case 'é“œé•' : $swf='kg3.swf';break;
+		case 'é“¶é•' : $swf='kg4.swf';break;
+		case 'é‡‘é•' : $swf='kg5.swf';break;
 		default : $swf='kg1.swf';
 	}
 ?>

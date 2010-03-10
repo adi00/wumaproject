@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `pw_teamprojects`(
 	`owner` char(15) not null,
 	`owner_id` mediumint(8) unsigned not null,
 	`priority` tinyint(1) unsigned not null default 0,
-    `plan_start_time` int(10) unsigned not null default 0, 
+	`plan_start_time` int(10) unsigned not null default 0, 
 	`plan_end_time` int(10) unsigned not null default 0,
 	`real_start_time` int(10) unsigned not null default 0,
 	`real_end_time` int(10) unsigned not null default 0,

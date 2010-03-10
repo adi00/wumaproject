@@ -1,0 +1,152 @@
+<!--<?php print <<<EOT
+-->
+<div id="breadCrumb">
+		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; teamwork首页
+</div>
+
+<div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="h" colspan="12">我的任务
+<a href="" style="text-align:right;">新任务</a>
+</td></tr>
+<tr class="tr2">
+<td class="tal y-style">任务优先级</td>
+<td class="tal y-style">任务状态</td>
+<td class="tal y-style">任务名称</td>
+<td class="tal y-style">计划开始时间</td>
+<td class="tal y-style">实际开始时间</td>
+<td class="tal y-style">创建时间</td>
+</tr>
+<!--
+EOT;
+$i=0;
+foreach($teamtaskdb as $teamtask){
+$i++;
+$class=$i%2==0 ? "f_two" : "f_one";
+print <<<EOT
+-->
+<tr class="tr3 $class">
+<td>
+<b>$teamtask[priority]</b></a></td>
+<td class="tal y-style">
+<!--
+EOT;
+if($teamtask[status]==1){
+	$color="green";
+}elseif($teamtask[status]==2){
+	$color="#CC0033";
+}else{
+	$color="#000000";
+}
+print <<<EOT
+-->
+<font color="$color">
+$teamtask[statusname]</font></td>
+<!--
+EOT;
+$plan_start_time = 0;
+$real_start_time = 0;
+$create_time = 0;
+if( $teamtask[plan_start_time] > 0 ){
+	$plan_start_time = date("Y-m-d H:i:s", $teamtask[plan_start_time]);
+}
+if( $teamtask[real_start_time] > 0 ){
+	$real_start_time = date("Y-m-d H:i:s", $teamtask[real_start_time]);
+}
+if( $teamtask[create_time] > 0 ){
+	$create_time = date("Y-m-d H:i:s", $teamtask[create_time]);
+}
+print <<<EOT
+-->
+<td ><a href="#" target="_blank">$teamtask[taskname]</a></td>
+<td class="tal y-style">$plan_start_time</td>
+<td class="tal y-style">$real_start_time</td>
+<td class="tal y-style">$create_time</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<tr class="tr2">
+<td class="h" colspan="12">
+<p style="text-align: right;">
+<a href="">更多任务</a>
+</p></td></tr>
+</table></div>
+
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td colspan="12" height="20"></td></tr>
+</table>
+
+<div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="h" colspan="12">我的项目
+<a href="" style="text-align:right;">新项目</a></td></tr>
+<tr class="tr2">
+<td class="tal y-style">项目优先级</td>
+<td class="tal y-style">项目状态</td>
+<td class="tal y-style">项目名称</td>
+<td class="tal y-style">计划开始时间</td>
+<td class="tal y-style">实际开始时间</td>
+<td class="tal y-style">创建时间</td>
+</tr>
+<!--
+EOT;
+$i=0;
+foreach($projectdb as $project){
+$i++;
+$class=$i%2==0 ? "f_two" : "f_one";
+print <<<EOT
+-->
+<tr class="tr3 $class">
+<td>
+<b>$project[priority]</b></a></td>
+<td class="tal y-style">
+<!--
+EOT;
+if($project[status]==1){
+	$color="green";
+}elseif($project[status]==2){
+	$color="#CC0033";
+}else{
+	$color="#000000";
+}
+print <<<EOT
+-->
+<font color="$color">
+$project[statusname]</font></td>
+<!--
+EOT;
+$plan_start_time = 0;
+$real_start_time = 0;
+$create_time = 0;
+if( $project[plan_start_time] > 0 ){
+	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
+}
+if( $project[real_start_time] > 0 ){
+	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
+}
+if( $project[create_time] > 0 ){
+	$create_time = date("Y-m-d H:i:s", $project[create_time]);
+}
+print <<<EOT
+-->
+<td ><a href="#" target="_blank">$project[projectname]</a></td>
+<td class="tal y-style">$plan_start_time</td>
+<td class="tal y-style">$real_start_time</td>
+<td class="tal y-style">$create_time</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<tr class="tr2">
+<td class="h" colspan="12">
+<p style="text-align: right;">
+<a href="">更多项目</a>
+</p></td></tr>
+</table>
+</div>
+<!--
+EOT;
+?>-->

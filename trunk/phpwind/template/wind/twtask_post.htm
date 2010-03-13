@@ -1,152 +1,173 @@
-<!--<?php print <<<EOT
--->
-<div id="breadCrumb">
-		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; teamwork首页
-</div>
+<!-- twtask_post -->
+<script src="js/twcalender.js"></script>
+<script src="js/kissy/yahoo-dom-event.js"></script>
+<script src="js/kissy/editor-min.js"></script>
+<script>
+KISSY.ready(function(S) {
+    S.Editor('content', {
+        base: 'js/kissy/',
+        pluginsConfig: {
+            image: {
+                tabs : ['link'],
+            },
+            smiley: {
+                tabs : ['wangwang']
+            }
+        }
+    });
+});
+KISSY.ready(function(S) {
+    S.Editor('remark', {
+        base: 'js/kissy/',
+        pluginsConfig: {
+            image: {
+                tabs : ['link'],
+            },
+            smiley: {
+                tabs : ['wangwang']
+            }
+        }
+    });
+});
+</script>
 
-<div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
-<tr><td class="h" colspan="12">我的任务
-<a href="twpost.php?action=task" style="text-align:right;">新任务</a>
-</td></tr>
-<tr class="tr2">
-<td class="tal y-style">任务优先级</td>
-<td class="tal y-style">任务状态</td>
-<td class="tal y-style">任务名称</td>
-<td class="tal y-style">计划开始时间</td>
-<td class="tal y-style">实际开始时间</td>
-<td class="tal y-style">创建时间</td>
-</tr>
-<!--
-EOT;
-$i=0;
-foreach($teamtaskdb as $teamtask){
-$i++;
-$class=$i%2==0 ? "f_two" : "f_one";
-print <<<EOT
--->
-<tr class="tr3 $class">
-<td>
-<a><b>$teamtask[priority]</b></a></td>
-<td class="tal y-style">
-<!--
-EOT;
-if($teamtask[status]==1){
-	$color="green";
-}elseif($teamtask[status]==2){
-	$color="#CC0033";
-}else{
-	$color="#000000";
+<link rel="stylesheet" href="js/kissy/reset-min.css" />
+<link rel="stylesheet" href="js/kissy/editor-min.css" />
+<style type="text/css">
+.btn {
+	cursor: pointer;
+	font-size: 14px;
+	padding: 2px 12px;
+	font-weight: 700;
 }
-print <<<EOT
--->
-<font color="$color">
-$teamtask[statusname]</font></td>
-<!--
-EOT;
-$plan_start_time = 0;
-$real_start_time = 0;
-$create_time = 0;
-if( $teamtask[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $teamtask[plan_start_time]);
-}
-if( $teamtask[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $teamtask[real_start_time]);
-}
-if( $teamtask[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $teamtask[create_time]);
-}
-print <<<EOT
--->
-<td ><a href="#" target="_blank">$teamtask[taskname]</a></td>
-<td class="tal y-style">$plan_start_time</td>
-<td class="tal y-style">$real_start_time</td>
-<td class="tal y-style">$create_time</td>
-</tr>
-<!--
-EOT;
-}
-print <<<EOT
--->
-<tr class="tr2">
-<td class="h" colspan="12">
-<p style="text-align: right;">
-<a href="">更多任务</a>
-</p></td></tr>
-</table></div>
+</style>
 
-<table width="100%" cellspacing="0" cellpadding="0">
-<tr><td colspan="12" height="20"></td></tr>
+<!--<?php
+print <<<EOT
+-->
+<!-- nav -->
+<div id="breadCrumb"><img
+	src="$imgpath/$stylepath/thread/home-old.gif" />&nbsp;<a
+	href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a
+	href="/twindex.php">teamwork首页</a> &raquo; $actionTitle</div>
+
+<!-- form -->
+<form action="twtask.php?action=$action" method="post" name="post_task" id="post_task">
+<table cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="h"><b>$actionTitle</b></td>
+			<td class="h tar"><span class="fr">标<font color="red">*</font>为必填项</span></td>
+		</tr>
+		<tr class="tr3">
+			<td>计划起止时间:</td>
+			<td>
+			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="1" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="2" readonly="readonly" />&nbsp;<font color="red">$error[plan_start_time]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;所属项目:</td>
+			<td>
+<!--
+EOT;
+foreach($twprojects as $twproject) {
+$pid_checked = (isset($data[pid]) && $twproject[pid]==$data[pid] ? 'checked' : '');
+print <<<EOT
+-->
+			<input value="$twproject[pid]" type="radio" name="pid" id="pid" $pid_checked />&nbsp;$twproject[projectname]&nbsp;&nbsp;
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			&nbsp;<font color="red">$error[pid]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;任务名称:</td>
+			<td><input value="$data[taskname]" class="input" type="text" name="taskname" id="taskname" size="50" tabindex="3" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[taskname]</font></td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;负责人:</td>
+			<td>
+<!--
+EOT;
+foreach($twusers as $twuser) {
+$owner_id_checked = (isset($data[owner_id]) && $twuser[uid]==$data[owner_id] ? 'checked' : '');
+print <<<EOT
+-->
+			<input value="$twuser[uid]" type="radio" name="owner_id" id="owner_id" $owner_id_checked />&nbsp;$twuser[username]&nbsp;&nbsp;
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			&nbsp;<font color="red">$error[owner_id]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;优先级:</td>
+			<td>
+			<select tabindex="4" name="priority" id="priority">
+			<option value="-1">请选择</option>
+<!--
+EOT;
+foreach($teamwork_level as $key=>$val) {
+$level_selected = (isset($data[priority]) && $key==$data[priority] ? 'selected' : '');
+print <<<EOT
+-->
+			<option value="$key" $level_selected>$val</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</select>&nbsp;(P0最紧急)&nbsp;<font color="red">$error[priority]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;任务当前状态:</td>
+			<td>
+			<select tabindex="5" name="status" id="status">
+			<option value="-1">请选择</option>
+<!--
+EOT;
+foreach($teamwork_status as $key=>$val) {
+$status_selected = (isset($data[status]) && $key==$data[status] ? 'selected' : '');
+print <<<EOT
+-->
+			<option value="$key" $status_selected>$val</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</select>&nbsp;<font color="red">$error[status]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>任务内容:</td>
+			<td>
+			<textarea rows="10" cols="76" class="input" style="width: 690px" name="content" id="content" tabindex="6">$data[content]</textarea>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>任务备注:</td>
+			<td>
+			<textarea rows="10" cols="76" class="input" style="width: 690px" name="remark" id="remark" tabindex="7">$data[remark]</textarea>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td></td>
+			<td>
+			<input type="submit" value=" 提 交 " class="btn" /><font color="red">$error[all]</font>
+			<input type="hidden" value="submit" name="flag" />
+			<input type="hidden" value="$tid" name="tid" />
+			</td>
+		</tr>
+	</tbody>
 </table>
-
-<div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
-<tr><td class="h" colspan="12">我的项目
-<a href="twpost.php?action=project" style="text-align:right;">新项目</a></td></tr>
-<tr class="tr2">
-<td class="tal y-style">项目优先级</td>
-<td class="tal y-style">项目状态</td>
-<td class="tal y-style">项目名称</td>
-<td class="tal y-style">计划开始时间</td>
-<td class="tal y-style">实际开始时间</td>
-<td class="tal y-style">创建时间</td>
-</tr>
-<!--
-EOT;
-$i=0;
-foreach($projectdb as $project){
-$i++;
-$class=$i%2==0 ? "f_two" : "f_one";
-print <<<EOT
--->
-<tr class="tr3 $class">
-<td>
-<a><b>$project[priority]</b></a></td>
-<td class="tal y-style">
-<!--
-EOT;
-if($project[status]==1){
-	$color="green";
-}elseif($project[status]==2){
-	$color="#CC0033";
-}else{
-	$color="#000000";
-}
-print <<<EOT
--->
-<font color="$color">
-$project[statusname]</font></td>
-<!--
-EOT;
-$plan_start_time = 0;
-$real_start_time = 0;
-$create_time = 0;
-if( $project[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
-}
-if( $project[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
-}
-if( $project[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $project[create_time]);
-}
-print <<<EOT
--->
-<td ><a href="#" target="_blank">$project[projectname]</a></td>
-<td class="tal y-style">$plan_start_time</td>
-<td class="tal y-style">$real_start_time</td>
-<td class="tal y-style">$create_time</td>
-</tr>
-<!--
-EOT;
-}
-print <<<EOT
--->
-<tr class="tr2">
-<td class="h" colspan="12">
-<p style="text-align: right;">
-<a href="">更多项目</a>
-</p></td></tr>
-</table>
-</div>
+</form>
 <!--
 EOT;
 ?>-->

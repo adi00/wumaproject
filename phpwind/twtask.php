@@ -163,13 +163,13 @@ if ('submit' == $flag) {
 }
 
 // 载入用户
-$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3');
+$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
 $twusers = array();
 while($twuser = $db->fetch_array($query)){
 	$twusers[] = $twuser;
 }
 
-// 载入项目(未结束)
+// 载入项目(进行中)
 $query = $db->query('SELECT * FROM pw_teamprojects WHERE status IN (0,1,2)');
 $twprojects = array();
 while($twproject = $db->fetch_array($query)){

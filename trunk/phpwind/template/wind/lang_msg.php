@@ -3,6 +3,9 @@
 
 $lang['msg'] = array (
 
+// teamwork
+'teamwork_denied'           => '用户组权限:你所属的用户组不能使用teamwork!',
+
 'undefined_action'			=> '非法操作,请返回',
 'not_login'					=> '您还没有登录或注册，暂时不能使用此功能!!',
 'proclock'					=> '服务器繁忙，请稍侯重试!',
@@ -72,7 +75,7 @@ $lang['msg'] = array (
 'upload_close'				=> '附件上传功能已关闭',
 'upload_size_0'				=> '附件{$GLOBALS[atc_attachment_name]}的大小不能为0',
 'upload_size_error'			=> '附件 {$GLOBALS[atc_attachment_name]} 超过指定大小'
-								. '({$GLOBALS[oversize]})KB',
+. '({$GLOBALS[oversize]})KB',
 'upload_type_error'			=> '附件{$GLOBALS[atc_attachment_name]}的类型不符合准则',
 'upload_num_error'			=> '您今天上传的附件已经达到指定个数({$GLOBALS[_G][allownum]} 个)',
 'upload_error'				=> '上传附件失败，造成的原因可能有:附件目录不可写(777)、空间在安全模式下、空间大小已不足。',
@@ -901,7 +904,7 @@ $lang['msg'] = array (
 'field_rules_error'			=> '选项内容的格式错误',
 'urlcheck_toomany'			=> "发布失败，内容中限制最多包含{$GLOBALS[db_urlchecklimit]}个链接",
 'urlcheck_inblack'			=> "发布失败，内容中的外链 <font color=red>'{$GLOBALS[blackurl]}'</font> 在黑名单中，禁止发布",
-								
+
 
 'userbinding_same'			=> '不能绑定本帐号，请选用其他帐号绑定!',
 'switchuser_error'			=> '你绑定的帐号密码已修改，请解除后重新绑定!',

@@ -1,11 +1,7 @@
 <?php
 define('SCR','twindex');
 require_once('global.php');
-@include_once(D_P.'data/bbscache/teamwork_config.php');
-/**
-* 用户组权限判断
-*/
-$_G['allowmember']==0 && Showmsg('member_right');
+include_once(D_P.'data/bbscache/teamwork_config.php');
 require_once(R_P.'require/header.php');
 
 //teamwork_projects

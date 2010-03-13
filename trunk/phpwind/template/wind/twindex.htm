@@ -6,7 +6,7 @@
 
 <div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
 <tr><td class="h" colspan="12">我的任务
-<a href="twpost.php?module=task&action=add" style="text-align:right;">新任务</a>
+<a href="twtask.php?action=add" style="text-align:right;">新任务</a>
 </td></tr>
 <tr class="tr2">
 <td class="tal y-style">任务优先级</td>
@@ -47,10 +47,10 @@ $plan_start_time = 0;
 $real_start_time = 0;
 $create_time = 0;
 if( $teamtask[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $teamtask[plan_start_time]);
+	$plan_start_time = date("Y-m-d", $teamtask[plan_start_time]);
 }
 if( $teamtask[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $teamtask[real_start_time]);
+	$real_start_time = date("Y-m-d", $teamtask[real_start_time]);
 }
 if( $teamtask[create_time] > 0 ){
 	$create_time = date("Y-m-d H:i:s", $teamtask[create_time]);
@@ -80,7 +80,7 @@ print <<<EOT
 
 <div class="t"><table width="100%" cellspacing="0" cellpadding="0">
 <tr><td class="h" colspan="12">我的项目
-<a href="twpost.php?module=project&action=add" style="text-align:right;">新项目</a></td></tr>
+<a href="twproject.php?action=add" style="text-align:right;">新项目</a></td></tr>
 <tr class="tr2">
 <td class="tal y-style">项目优先级</td>
 <td class="tal y-style">项目状态</td>
@@ -120,10 +120,10 @@ $plan_start_time = 0;
 $real_start_time = 0;
 $create_time = 0;
 if( $project[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
+	$plan_start_time = date("Y-m-d", $project[plan_start_time]);
 }
 if( $project[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
+	$real_start_time = date("Y-m-d", $project[real_start_time]);
 }
 if( $project[create_time] > 0 ){
 	$create_time = date("Y-m-d H:i:s", $project[create_time]);

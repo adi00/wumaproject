@@ -9,7 +9,7 @@
  * @subpackage twproject
  */
 
-define('SCR','twpost');
+define('SCR','twproject');
 require_once('global.php');
 include_once(D_P.'data/bbscache/teamwork_config.php');
 require_once(R_P.'require/header.php');
@@ -19,70 +19,110 @@ require_once(R_P.'require/header.php');
  */
 
 // 载入用户
-$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
+$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3');
 $twusers = array();
 while($twuser = $db->fetch_array($query)){
 	$twusers[] = $twuser;
 }
 
 // 基础数据
-$module = GetGP('module'); // project
 $action = GetGP('action'); // add,update
+$actionTitle = ('add' == $action ? '发布新项目' : ('update' == $action ? '修改项目中' : '未知'));
 $data = $_POST;
 $flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
 
-if ('project' == $module) {
+// 显示逻辑
+if ('submit' != $flag) {
 
-	/* 项目逻辑 */
+	if ('add' == $action) {
 
-	// 显示逻辑
-	if ('submit' != $flag) {
+		/* 新增显示 */
 
-		if ('add' == $action) {
+	} elseif ('update' == $action) {
 
-			/* 新增显示 */
+		/* 修改显示 */
 
-		} elseif ('update' == $action) {
+		$pid = GetGP('pid'); // project id
+		if (is_numeric($pid) && 0 < $pid) {
 
-			/* 修改显示 */
+			$twproject = $db->get_one("SELECT * FROM pw_teamprojects WHERE pid = {$pid}");
 
-			$pid = GetGP('pid'); // project id
-			if (is_numeric($pid) && 0 < $pid) {
+			// 数据为空
+			if (empty($twproject)) {
 
-				$twproject = $db->get_one("SELECT * FROM pw_teamprojects WHERE pid = {$pid}");
-
-				// 数据为空
-				if (empty($twproject)) {
-
-					header('Location: /twindex.php');
-					exit('redirecting...');
-				}
-
-				// 字段处理
-				$twproject['plan_start_time'] = date('Y-m-d', $twproject['plan_start_time']);
-				$twproject['plan_end_time'] = date('Y-m-d', $twproject['plan_end_time']);
-				// 页面输出
-				$data = $twproject;
-
-			} else {
-
-				// 非法操作
-				Showmsg('undefined_action');
+				header('Location: /twindex.php');
+				exit('redirecting...');
 			}
+
+			// 字段处理
+			$twproject['plan_start_time'] = date('Y-m-d', $twproject['plan_start_time']);
+			$twproject['plan_end_time'] = date('Y-m-d', $twproject['plan_end_time']);
+			// 页面输出
+			$data = $twproject;
 
 		} else {
 
 			// 非法操作
 			Showmsg('undefined_action');
 		}
+
+	} else {
+
+		// 非法操作
+		Showmsg('undefined_action');
 	}
+}
 
-	// 提交逻辑
-	if ('submit' == $flag) {
+// 提交逻辑
+if ('submit' == $flag) {
 
-		if ('add' == $action) {
+	if ('add' == $action) {
 
-			/* 新增提交 */
+		/* 新增提交 */
+
+		$project = validator_submit_project($data);
+		if (!isset($project['error']) && isset($project['ret'])) {
+
+			/* 验证成功 */
+
+			// 默认字段
+			$ret = $project['ret'];
+			$ret['real_start_time'] = 0;
+			$ret['real_end_time'] = 0;
+			$ret['publisher_id'] = $winduid;
+			$ret['create_time'] = time();
+			// 组装SQL
+			$sql = 'INSERT INTO pw_teamprojects (projectname,owner,owner_id,priority,plan_start_time,'.
+			       'plan_end_time,wiki,svn,remark,status,real_start_time,real_end_time,'.
+			       'publisher_id,create_time) VALUES'. pwSqlMulti(array($ret));
+			//echo $sql;exit;
+			// 写入数据
+			$query = $db->update($sql);
+			$pid = $db->insert_id();
+			// 写入结果
+			if (is_numeric($pid) && 0 < $pid) {
+
+				header('Location: /twindex.php');
+				exit('redirecting...');
+
+			} else {
+
+				$project['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
+				$error = $project['error'];
+			}
+
+		} else {
+
+			/* 验证失败 */
+
+			$error = $project['error'];
+		}
+
+	} elseif ('update' == $action) {
+
+		/* 修改提交 */
+		$pid = GetGP('pid'); // project id
+		if (is_numeric($pid) && 0 < $pid) {
 
 			$project = validator_submit_project($data);
 			if (!isset($project['error']) && isset($project['ret'])) {
@@ -91,27 +131,23 @@ if ('project' == $module) {
 
 				// 默认字段
 				$ret = $project['ret'];
-				$ret['real_start_time'] = 0;
-				$ret['real_end_time'] = 0;
-				$ret['publisher_id'] = $winduid;
-				$ret['create_time'] = time();
+				$ret['modify_time'] = time();
 				// 组装SQL
-				$sql = 'INSERT INTO pw_teamprojects (projectname,owner,owner_id,priority,plan_start_time,'.
-			       'plan_end_time,wiki,svn,remark,status,real_start_time,real_end_time,'.
-			       'publisher_id,create_time) VALUES'. pwSqlMulti(array($ret));
+				$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).
+						   ' WHERE pid ='.pwEscape($pid)." AND publisher_id = {$winduid}";
 				//echo $sql;exit;
-				// 写入数据
+				// 修改数据
 				$query = $db->update($sql);
-				$pid = $db->insert_id();
-				// 写入结果
-				if (is_numeric($pid) && 0 < $pid) {
+				$rows = $db->affected_rows();
+				// 修改结果
+				if (is_numeric($rows) && 0 < $rows) {
 
 					header('Location: /twindex.php');
 					exit('redirecting...');
 
 				} else {
 
-					$project['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
+					$project['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
 					$error = $project['error'];
 				}
 
@@ -122,67 +158,21 @@ if ('project' == $module) {
 				$error = $project['error'];
 			}
 
-		} elseif ('update' == $action) {
-
-			/* 修改提交 */
-			$pid = GetGP('pid'); // project id
-			if (is_numeric($pid) && 0 < $pid) {
-
-				$project = validator_submit_project($data);
-				if (!isset($project['error']) && isset($project['ret'])) {
-
-					/* 验证成功 */
-
-					// 默认字段
-					$ret = $project['ret'];
-					$ret['modify_time'] = time();
-					// 组装SQL
-					$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).
-						   ' WHERE pid ='.pwEscape($pid)." AND publisher_id = {$winduid}";
-					//echo $sql;exit;
-					// 修改数据
-					$query = $db->update($sql);
-					$rows = $db->affected_rows();
-					// 修改结果
-					if (is_numeric($rows) && 0 < $rows) {
-
-						header('Location: /twindex.php');
-						exit('redirecting...');
-
-					} else {
-
-						$project['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
-						$error = $project['error'];
-					}
-
-				} else {
-
-					/* 验证失败 */
-
-					$error = $project['error'];
-				}
-
-			} else {
-
-				// 非法操作
-				Showmsg('undefined_action');
-			}
-
 		} else {
 
 			// 非法操作
 			Showmsg('undefined_action');
 		}
+
+	} else {
+
+		// 非法操作
+		Showmsg('undefined_action');
 	}
-
-	// 载入页面
-	require_once(PrintEot('twpost_project'));
-
-} else {
-
-	// 非法操作
-	Showmsg('undefined_action');
 }
+
+// 载入页面
+require_once(PrintEot('twproject_post'));
 
 // 公用页尾
 footer();

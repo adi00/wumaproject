@@ -53,7 +53,7 @@ if( $teamtask[real_start_time] > 0 ){
 	$real_start_time = date("Y-m-d", $teamtask[real_start_time]);
 }
 if( $teamtask[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $teamtask[create_time]);
+	$create_time = date("Y-m-d H:i", $teamtask[create_time]);
 }
 print <<<EOT
 -->
@@ -126,7 +126,7 @@ if( $project[real_start_time] > 0 ){
 	$real_start_time = date("Y-m-d", $project[real_start_time]);
 }
 if( $project[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $project[create_time]);
+	$create_time = date("Y-m-d H:i", $project[create_time]);
 }
 print <<<EOT
 -->

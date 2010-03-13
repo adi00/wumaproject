@@ -36,14 +36,14 @@ print <<<EOT
 <div id="breadCrumb"><img
 	src="$imgpath/$stylepath/thread/home-old.gif" />&nbsp;<a
 	href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a
-	href="/twindex.php">teamwork首页</a> &raquo; 发布新项目</div>
+	href="/twindex.php">teamwork首页</a> &raquo; $actionTitle</div>
 
 <!-- form -->
-<form action="twpost.php?module=project&action=$action" method="post" name="post_project" id="post_project">
+<form action="twproject.php?action=$action" method="post" name="post_project" id="post_project">
 <table cellspacing="0" width="100%">
 	<tbody>
 		<tr>
-			<td class="h"><b>发布新项目</b></td>
+			<td class="h"><b>$actionTitle</b></td>
 			<td class="h tar"><span class="fr">标<font color="red">*</font>为必填项</span></td>
 		</tr>
 		<tr class="tr3">
@@ -59,21 +59,19 @@ print <<<EOT
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;负责人:</td>
 			<td>
-			<select tabindex="4" name="owner_id" id="owner_id">
-			<option value="-1">请选择</option>
 <!--
 EOT;
 foreach($twusers as $twuser) {
-$owner_id_selected = ($twuser[uid]==$data[owner_id] ? 'selected' : '');
+$owner_id_checked = (isset($data[owner_id]) && $twuser[uid]==$data[owner_id] ? 'checked' : '');
 print <<<EOT
 -->
-			<option value="$twuser[uid]" $owner_id_selected>$twuser[username]<!-- EOT; --></option>
+			<input value="$twuser[uid]" type="radio" name="owner_id" id="owner_id" $owner_id_checked />&nbsp;$twuser[username]&nbsp;&nbsp;
 <!--
 EOT;
 }
 print <<<EOT
 -->
-			</select>&nbsp;<font color="red">$error[owner_id]</font>
+			&nbsp;<font color="red">$error[owner_id]</font>
 			</td>
 		</tr>
 		<tr class="tr3">
@@ -84,7 +82,7 @@ print <<<EOT
 <!--
 EOT;
 foreach($teamwork_level as $key=>$val) {
-$level_selected = ($key==$data[priority] ? 'selected' : '');
+$level_selected = (isset($data[priority]) && $key==$data[priority] ? 'selected' : '');
 print <<<EOT
 -->
 			<option value="$key" $level_selected>$val</option>
@@ -116,7 +114,7 @@ print <<<EOT
 <!--
 EOT;
 foreach($teamwork_status as $key=>$val) {
-$status_selected = ($key==$data[status] ? 'selected' : '');
+$status_selected = (isset($data[status]) && $key==$data[status] ? 'selected' : '');
 print <<<EOT
 -->
 			<option value="$key" $status_selected>$val</option>

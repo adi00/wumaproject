@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `pw_teamtasks`(
 	`remark` text,
 	`status` tinyint(1) unsigned not null default 0,
 	`create_time` int(10) unsigned not null default 0,
+	`modify_time` int(10) unsigned not null default 0,
 	PRIMARY KEY(`tid`)
 )ENGINE=MyIsam default CHARSET=utf8;
 
@@ -52,21 +53,22 @@ CREATE TABLE IF NOT EXISTS `pw_teamprojects`(
 	`publisher_id` mediumint(8) unsigned not null default 0,
 	`remark` text,
 	`create_time` int(10) unsigned not null default 0,
+	`modify_time` int(10) unsigned not null default 0,
 	`status` tinyint(1) unsigned not null default 0,
 	PRIMARY KEY(`pid`)
 )ENGINE=MyIsam DEFAULT CHARSET=utf8;
 
-CREATE INDEX in_owner_id ON pw_teamtasks(
+CREATE INDEX in_owner_id ON pw_teamprojects(
 	`owner_id`,
 	`create_time`
 );
 
-CREATE INDEX in_publisher_id ON pw_teamtasks(
+CREATE INDEX in_publisher_id ON pw_teamprojects(
 	`publisher_id`,
 	`create_time`
 );
 
-CREATE INDEX in_status ON pw_teamtasks(
+CREATE INDEX in_status ON pw_teamprojects(
 	`status`,
 	`create_time`
 );

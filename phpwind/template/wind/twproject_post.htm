@@ -1,4 +1,4 @@
-<!-- twpost_project -->
+<!-- twproject_post -->
 <script src="js/twcalender.js"></script>
 <script src="js/kissy/yahoo-dom-event.js"></script>
 <script src="js/kissy/editor-min.js"></script>
@@ -47,14 +47,14 @@ print <<<EOT
 			<td class="h tar"><span class="fr">标<font color="red">*</font>为必填项</span></td>
 		</tr>
 		<tr class="tr3">
-			<td><font color="red">*</font>&nbsp;项目名称:</td>
-			<td><input value="$data[projectname]" class="input" type="text" name="projectname" id="projectname" size="50" tabindex="1" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[projectname]</font></td>
-		</tr>
-		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;计划起止时间:</td>
 			<td>
-			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="2" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="3" readonly="readonly" />&nbsp;(计划截止时间可不填)&nbsp;<font color="red">$error[plan_start_time]</font>
+			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="1" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="2" readonly="readonly" />&nbsp;(计划截止时间可不填)&nbsp;<font color="red">$error[plan_start_time]</font>
 			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;项目名称:</td>
+			<td><input value="$data[projectname]" class="input" type="text" name="projectname" id="projectname" size="50" tabindex="3" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[projectname]</font></td>
 		</tr>
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;负责人:</td>
@@ -77,7 +77,7 @@ print <<<EOT
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;优先级:</td>
 			<td>
-			<select tabindex="5" name="priority" id="priority">
+			<select tabindex="4" name="priority" id="priority">
 			<option value="-1">请选择</option>
 <!--
 EOT;
@@ -95,21 +95,9 @@ print <<<EOT
 			</td>
 		</tr>
 		<tr class="tr3">
-			<td>WIKI地址:</td>
+			<td><font color="red">*</font>&nbsp;项目当前状态:</td>
 			<td>
-			<input value="$data[wiki]" class="input" type="text" name="wiki" id="wiki" size="80" tabindex="6" maxlength="200" />
-			</td>
-		</tr>
-		<tr class="tr3">
-			<td>SVN地址:</td>
-			<td>
-			<input value="$data[svn]" class="input" type="text" name="svn" id="svn" size="80" tabindex="7" maxlength="200" />
-			</td>
-		</tr>
-		<tr class="tr3">
-			<td><font color="red">*</font>&nbsp;进度状态:</td>
-			<td>
-			<select tabindex="8" name="status" id="status">
+			<select tabindex="5" name="status" id="status">
 			<option value="-1">请选择</option>
 <!--
 EOT;
@@ -127,9 +115,21 @@ print <<<EOT
 			</td>
 		</tr>
 		<tr class="tr3">
+			<td>WIKI地址:</td>
+			<td>
+			<input value="$data[wiki]" class="input" type="text" name="wiki" id="wiki" size="80" tabindex="6" maxlength="200" />
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>SVN地址:</td>
+			<td>
+			<input value="$data[svn]" class="input" type="text" name="svn" id="svn" size="80" tabindex="7" maxlength="200" />
+			</td>
+		</tr>
+		<tr class="tr3">
 			<td>项目备注:</td>
 			<td>
-			<textarea rows="10" cols="76" class="input" style="width: 690px" name="remark" id="remark" tabindex="9">$data[remark]</textarea>
+			<textarea rows="10" cols="76" class="input" style="width: 690px" name="remark" id="remark" tabindex="8">$data[remark]</textarea>
 			</td>
 		</tr>
 		<tr class="tr3">

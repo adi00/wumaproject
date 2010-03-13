@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Teamwork项目模块
+ * Teamwork任务模块
  * 新增及修改等等操作
  *
  * @author yumin
  * @package teamwork
- * @subpackage twproject
+ * @subpackage twtask
  */
 
-define('SCR','twproject');
+define('SCR','twtask');
 require_once('global.php');
 include_once(D_P.'data/bbscache/teamwork_config.php');
 require_once(R_P.'require/header.php');
 
 // 基础数据
 $action = GetGP('action'); // add,update
-$actionTitle = ('add' == $action ? '发布新项目' : ('update' == $action ? '修改项目中' : '未知'));
+$actionTitle = ('add' == $action ? '发布新任务' : ('update' == $action ? '修改任务中' : '未知'));
 $data = $_POST;
 $flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
 
@@ -31,23 +31,23 @@ if ('submit' != $flag) {
 
 		/* 修改显示 */
 
-		$pid = GetGP('pid'); // project id
-		if (0 < $pid) {
+		$tid = GetGP('tid'); // task id
+		if (0 < $tid) {
 
-			$twproject = $db->get_one("SELECT * FROM pw_teamprojects WHERE pid = {$pid} AND publisher_id = {$winduid}");
+			$twtask = $db->get_one('SELECT * FROM pw_teamtasks WHERE tid = '.pwEscape($tid)." AND publisher_id = {$winduid}");
 
 			// 数据为空
-			if (empty($twproject)) {
+			if (empty($twtask)) {
 
 				header('Location: /twindex.php');
 				exit('redirecting...');
 			}
 
 			// 字段处理
-			$twproject['plan_start_time'] = date('Y-m-d', $twproject['plan_start_time']);
-			$twproject['plan_end_time'] = date('Y-m-d', $twproject['plan_end_time']);
+			$twtask['plan_start_time'] = date('Y-m-d', $twtask['plan_start_time']);
+			$twtask['plan_end_time'] = date('Y-m-d', $twtask['plan_end_time']);
 			// 页面输出
-			$data = $twproject;
+			$data = $twtask;
 
 		} else {
 
@@ -69,62 +69,63 @@ if ('submit' == $flag) {
 
 		/* 新增提交 */
 
-		$project = validator_submit_project($data);
-		if (!isset($project['error']) && isset($project['ret'])) {
+		$task = validator_submit_task($data);
+		if (!isset($task['error']) && isset($task['ret'])) {
 
 			/* 验证成功 */
 
 			// 默认字段
-			$ret = $project['ret'];
+			$ret = $task['ret'];
 			$ret['real_start_time'] = 0;
 			$ret['real_end_time'] = 0;
 			$ret['publisher_id'] = $winduid;
 			$ret['create_time'] = time();
 			$ret['modify_time'] = time();
 			// 组装SQL
-			$sql = 'INSERT INTO pw_teamprojects (projectname,owner,owner_id,priority,plan_start_time,'.
-			       'plan_end_time,wiki,svn,remark,status,real_start_time,real_end_time,'.
+			$sql = 'INSERT INTO pw_teamtasks (pid,taskname,owner,owner_id,priority,plan_start_time,'.
+			       'plan_end_time,remark,content,status,real_start_time,real_end_time,'.
 			       'publisher_id,create_time,modify_time) VALUES'. pwSqlMulti(array($ret));
 			//echo $sql;exit;
 			// 写入数据
 			$query = $db->update($sql);
-			$pid = $db->insert_id();
+			$tid = $db->insert_id();
 			// 写入结果
-			if (is_numeric($pid) && 0 < $pid) {
+			if (is_numeric($tid) && 0 < $tid) {
 
 				header('Location: /twindex.php');
 				exit('redirecting...');
 
 			} else {
 
-				$project['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
-				$error = $project['error'];
+				$task['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
+				$error = $task['error'];
 			}
 
 		} else {
 
 			/* 验证失败 */
 
-			$error = $project['error'];
+			$error = $task['error'];
 		}
 
 	} elseif ('update' == $action) {
 
 		/* 修改提交 */
 		$pid = GetGP('pid'); // project id
-		if (0 < $pid) {
+		$tid = GetGP('tid'); // task id
+		if (0 < $pid && 0 < $tid) {
 
-			$project = validator_submit_project($data);
-			if (!isset($project['error']) && isset($project['ret'])) {
+			$task = validator_submit_task($data);
+			if (!isset($task['error']) && isset($task['ret'])) {
 
 				/* 验证成功 */
 
 				// 默认字段
-				$ret = $project['ret'];
+				$ret = $task['ret'];
 				$ret['modify_time'] = time();
 				// 组装SQL
-				$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).
-					   ' WHERE pid ='.pwEscape($pid)." AND publisher_id = {$winduid}";
+				$sql = 'UPDATE pw_teamtasks SET '.pwSqlSingle($ret).
+					   ' WHERE tid = '.pwEscape($tid).' AND pid = '.pwEscape($pid)." AND publisher_id = {$winduid}";
 				//echo $sql;exit;
 				// 修改数据
 				$query = $db->update($sql);
@@ -137,15 +138,15 @@ if ('submit' == $flag) {
 
 				} else {
 
-					$project['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
-					$error = $project['error'];
+					$task['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
+					$error = $task['error'];
 				}
 
 			} else {
 
 				/* 验证失败 */
 
-				$error = $project['error'];
+				$error = $task['error'];
 			}
 
 		} else {
@@ -162,14 +163,21 @@ if ('submit' == $flag) {
 }
 
 // 载入用户
-$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
+$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3');
 $twusers = array();
 while($twuser = $db->fetch_array($query)){
 	$twusers[] = $twuser;
 }
 
+// 载入项目(未结束)
+$query = $db->query('SELECT * FROM pw_teamprojects WHERE status IN (0,1,2)');
+$twprojects = array();
+while($twproject = $db->fetch_array($query)){
+	$twprojects[] = $twproject;
+}
+
 // 载入页面
-require_once(PrintEot('twproject_post'));
+require_once(PrintEot('twtask_post'));
 
 // 公用页尾
 footer();
@@ -183,50 +191,58 @@ footer();
 
 
 /**
- * 项目表单字段的验证
+ * 任务表单字段的验证
  *
  * @author yumin
  * @param $data 表单提交数组
- * @return $project 结果以及错误
+ * @return $task 结果以及错误
  */
-function validator_submit_project($data){
+function validator_submit_task($data){
 
 	// 综合验证
 	if (empty($data)) {
-		$project['error']['all'] = '服务器只是个传说,啥都没填写的话,就别提交了嘛!';
-		return $project;
+		$task['error']['all'] = '服务器只是个传说,啥都没填写的话,就别提交了嘛!';
+		return $task;
 	}
 
-	// 项目名称
-	$key = 'projectname';
-	if (isset($data[$key]) && !empty($data[$key])) {
-		$project['ret'][$key] = get_safe_string($data[$key]);
+	// 所属项目
+	$key = 'pid';
+	if (isset($data[$key]) && 0 < $data[$key]) {
+		$task['ret'][$key] = $data[$key];
 	} else {
-		$project['error'][$key] = '项目名称是必填项';
+		$task['error'][$key] = '所属项目是必选项';
+	}
+
+	// 任务名称
+	$key = 'taskname';
+	if (isset($data[$key]) && !empty($data[$key])) {
+		$task['ret'][$key] = get_safe_string($data[$key]);
+	} else {
+		$task['error'][$key] = '任务名称是必填项';
 	}
 
 	// owner
 	$key = 'owner';
 	if (isset($data[$key]) && !empty($data[$key])) {
-		$project['ret'][$key] = get_safe_string($data[$key]);
+		$task['ret'][$key] = get_safe_string($data[$key]);
 	} else {
-		$project['ret'][$key] = '';
+		$task['ret'][$key] = '';
 	}
 
 	// 负责人
 	$key = 'owner_id';
 	if (isset($data[$key]) && 0 < $data[$key]) {
-		$project['ret'][$key] = $data[$key];
+		$task['ret'][$key] = $data[$key];
 	} else {
-		$project['error'][$key] = '负责人是必选项';
+		$task['error'][$key] = '负责人是必选项';
 	}
 
 	// 优先级
 	$key = 'priority';
 	if (isset($data[$key]) && 0 <= $data[$key]) {
-		$project['ret'][$key] = $data[$key];
+		$task['ret'][$key] = $data[$key];
 	} else {
-		$project['error'][$key] = '优先级是必选项';
+		$task['error'][$key] = '优先级是必选项';
 	}
 
 	// 计划起始时间
@@ -235,13 +251,13 @@ function validator_submit_project($data){
 
 		$start = strtotime($data[$key]);
 		if (0 < $start) {
-			$project['ret'][$key] = $start;
+			$task['ret'][$key] = $start;
 		} else {
-			$project['error'][$key] = '计划起始时间转换失败';		
+			$task['error'][$key] = '计划起始时间转换失败';		
 		}
 
 	} else {
-		$project['error'][$key] = '计划起始时间是必选项';
+		$task['ret'][$key] = 0;
 	}
 
 	// 计划截止时间
@@ -250,48 +266,40 @@ function validator_submit_project($data){
 
 		$end = strtotime($data[$key]);
 		if (0 < $end) {
-			$project['ret'][$key] = $end;
+			$task['ret'][$key] = $end;
 		} else {
-			$project['error'][$key] = '计划截止时间转换失败';		
+			$task['error'][$key] = '计划截止时间转换失败';		
 		}
 
 	} else {
-		$project['ret'][$key] = 0;
+		$task['ret'][$key] = 0;
 	}
 
-	// Wiki地址
-	$key = 'wiki';
-	if (isset($data[$key]) && !empty($data[$key])) {
-		$project['ret'][$key] = get_safe_string($data[$key]);
-	} else {
-		$project['ret'][$key] = '';
-	}
-
-	// SVN地址
-	$key = 'svn';
-	if (isset($data[$key]) && !empty($data[$key])) {
-		$project['ret'][$key] = get_safe_string($data[$key]);
-	} else {
-		$project['ret'][$key] = '';
-	}
-
-	// 项目备注
+	// 任务备注
 	$key = 'remark';
 	if (isset($data[$key]) && !empty($data[$key])) {
-		$project['ret'][$key] = $data[$key];
+		$task['ret'][$key] = $data[$key];
 	} else {
-		$project['ret'][$key] = '';
+		$task['ret'][$key] = '';
 	}
 
-	// 项目当前状态
+	// 任务内容
+	$key = 'content';
+	if (isset($data[$key]) && !empty($data[$key])) {
+		$task['ret'][$key] = $data[$key];
+	} else {
+		$task['ret'][$key] = '';
+	}
+
+	// 任务当前状态
 	$key = 'status';
 	if (isset($data[$key]) && 0 <= $data[$key]) {
-		$project['ret'][$key] = $data[$key];
+		$task['ret'][$key] = $data[$key];
 	} else {
-		$project['error'][$key] = '项目当前状态是必选项';
+		$task['error'][$key] = '任务当前状态是必选项';
 	}
 
-	return $project;
+	return $task;
 }
 
 /**
@@ -299,7 +307,7 @@ function validator_submit_project($data){
  *
  * @author yumin
  * @param $input 任意的字符串
- * @return $project 结果以及错误
+ * @return $task 结果以及错误
  */
 function get_safe_string($input) {
 

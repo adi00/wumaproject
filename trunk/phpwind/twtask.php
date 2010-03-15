@@ -1,119 +1,106 @@
 <?php
-
-/**
- * Teamwork任务模块
- * 新增及修改等等操作
- *
- * @author yumin
- * @package teamwork
- * @subpackage twtask
- */
-
-define('SCR','twtask');
+define('SCR','index');
+define('TW_POSITION','task');
 require_once('global.php');
-include_once(D_P.'data/bbscache/teamwork_config.php');
+@include_once(D_P.'data/bbscache/teamwork_config.php');
+/**
+* 用户组权限判断
+*/
+$_G['allowmember']==0 && Showmsg('member_right');
 require_once(R_P.'require/header.php');
 
-// 基础数据
-$action = GetGP('action'); // add,update
-$actionTitle = ('add' == $action ? '发布新任务' : ('update' == $action ? '修改任务中' : '未知'));
-$data = $_POST;
-$flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
+InitGP(array('action'));
+switch ($action) {
+case 'detail':
+	InitGP(array('tid'));
+	if(!is_numeric($tid)){
+		 Showmsg('data_error');
+	}
+	$sql		= "SELECT tt.*,tp.projectname FROM pw_teamtasks AS tt LEFT JOIN pw_teamprojects as tp on tt.pid = tp.pid WHERE tid={$tid}";
+	$query 		= $db->query($sql);
+	$teamtask 	= $db->fetch_array($query);
+	if(empty($teamtask)){
+		Showmsg('data_error');
+	}
+	$teamtask['priority'] = $teamwork_level[$teamtask['priority']];
+	$teamtask['statusname'] = $teamwork_status[$teamtask['status']];
+	require_once PrintEot('tw_task_detail');
+	break;
+case 'srst':
+	InitGP(array('tid'));
+	if(is_numeric($tid)){
+		$sql		= "UPDATE pw_teamtasks SET real_start_time=".time()." WHERE tid={$tid} AND owner_id={$winduid}";
+		$query 		= $db->query($sql);
+	}
+	break;
+case 'sret':
+	InitGP(array('tid'));
+	if(is_numeric($tid)){
+		$sql		= "UPDATE pw_teamtasks SET real_end_time=".time()." WHERE tid={$tid} AND owner_id={$winduid}";
+		$query 		= $db->query($sql);
+	}
+	break;
+case 'ss':
+	InitGP(array('tid','status'));
+	if(is_numeric($tid) && is_numeric($status) && array_key_exists($status, $teamwork_status)){
+		$sql		= "UPDATE pw_teamtasks SET status=".$status." WHERE tid={$tid} AND owner_id={$winduid}";
+		$query 		= $db->query($sql);
+	}
+	break;
+case 'add':
+case 'update':
+	$actionTitle = ('add' == $action ? '发布新任务' : ('update' == $action ? '修改任务中' : '未知'));
+	$data = $_POST;
+	$flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
 
-// 显示逻辑
-if ('submit' != $flag) {
+	// 显示逻辑
+	if ('submit' != $flag) {
 
-	if ('add' == $action) {
+		if ('add' == $action) {
 
-		/* 新增显示 */
+			/* 新增显示 */
 
-	} elseif ('update' == $action) {
+		} elseif ('update' == $action) {
 
-		/* 修改显示 */
+			/* 修改显示 */
 
-		$tid = GetGP('tid'); // task id
-		if (0 < $tid) {
+			$tid = GetGP('tid'); // task id
+			if (0 < $tid) {
 
-			$twtask = $db->get_one('SELECT * FROM pw_teamtasks WHERE tid = '.pwEscape($tid)." AND publisher_id = {$winduid}");
+				$twtask = $db->get_one('SELECT * FROM pw_teamtasks WHERE tid = '.pwEscape($tid)." AND publisher_id = {$winduid}");
 
-			// 数据为空
-			if (empty($twtask)) {
+				// 数据为空
+				if (empty($twtask)) {
 
-				header('Location: /twindex.php');
-				exit('redirecting...');
+					header('Location: /twindex.php');
+					exit('redirecting...');
+				}
+
+				// 字段处理
+				$twtask['plan_start_time'] = date('Y-m-d', $twtask['plan_start_time']);
+				$twtask['plan_end_time'] = date('Y-m-d', $twtask['plan_end_time']);
+				// 页面输出
+				$data = $twtask;
+
+			} else {
+
+				// 非法操作
+				Showmsg('undefined_action');
 			}
-
-			// 字段处理
-			$twtask['plan_start_time'] = date('Y-m-d', $twtask['plan_start_time']);
-			$twtask['plan_end_time'] = date('Y-m-d', $twtask['plan_end_time']);
-			// 页面输出
-			$data = $twtask;
 
 		} else {
 
 			// 非法操作
 			Showmsg('undefined_action');
 		}
-
-	} else {
-
-		// 非法操作
-		Showmsg('undefined_action');
 	}
-}
 
-// 提交逻辑
-if ('submit' == $flag) {
+	// 提交逻辑
+	if ('submit' == $flag) {
 
-	if ('add' == $action) {
+		if ('add' == $action) {
 
-		/* 新增提交 */
-
-		$task = validator_submit_task($data);
-		if (!isset($task['error']) && isset($task['ret'])) {
-
-			/* 验证成功 */
-
-			// 默认字段
-			$ret = $task['ret'];
-			$ret['real_start_time'] = 0;
-			$ret['real_end_time'] = 0;
-			$ret['publisher_id'] = $winduid;
-			$ret['create_time'] = time();
-			$ret['modify_time'] = time();
-			// 组装SQL
-			$sql = 'INSERT INTO pw_teamtasks (pid,taskname,owner,owner_id,priority,plan_start_time,'.
-			       'plan_end_time,remark,content,status,real_start_time,real_end_time,'.
-			       'publisher_id,create_time,modify_time) VALUES'. pwSqlMulti(array($ret));
-			//echo $sql;exit;
-			// 写入数据
-			$query = $db->update($sql);
-			$tid = $db->insert_id();
-			// 写入结果
-			if (is_numeric($tid) && 0 < $tid) {
-
-				header('Location: /twindex.php');
-				exit('redirecting...');
-
-			} else {
-
-				$task['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
-				$error = $task['error'];
-			}
-
-		} else {
-
-			/* 验证失败 */
-
-			$error = $task['error'];
-		}
-
-	} elseif ('update' == $action) {
-
-		/* 修改提交 */
-		$pid = GetGP('pid'); // project id
-		$tid = GetGP('tid'); // task id
-		if (0 < $pid && 0 < $tid) {
+			/* 新增提交 */
 
 			$task = validator_submit_task($data);
 			if (!isset($task['error']) && isset($task['ret'])) {
@@ -122,23 +109,28 @@ if ('submit' == $flag) {
 
 				// 默认字段
 				$ret = $task['ret'];
+				$ret['real_start_time'] = 0;
+				$ret['real_end_time'] = 0;
+				$ret['publisher_id'] = $winduid;
+				$ret['create_time'] = time();
 				$ret['modify_time'] = time();
 				// 组装SQL
-				$sql = 'UPDATE pw_teamtasks SET '.pwSqlSingle($ret).
-					   ' WHERE tid = '.pwEscape($tid).' AND pid = '.pwEscape($pid)." AND publisher_id = {$winduid}";
+				$sql = 'INSERT INTO pw_teamtasks (pid,taskname,owner,owner_id,priority,plan_start_time,'.
+				       'plan_end_time,remark,content,status,real_start_time,real_end_time,'.
+				       'publisher_id,create_time,modify_time) VALUES'. pwSqlMulti(array($ret));
 				//echo $sql;exit;
-				// 修改数据
+				// 写入数据
 				$query = $db->update($sql);
-				$rows = $db->affected_rows();
-				// 修改结果
-				if (is_numeric($rows) && 0 < $rows) {
+				$tid = $db->insert_id();
+				// 写入结果
+				if (is_numeric($tid) && 0 < $tid) {
 
 					header('Location: /twindex.php');
 					exit('redirecting...');
 
 				} else {
 
-					$task['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
+					$task['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
 					$error = $task['error'];
 				}
 
@@ -149,46 +141,167 @@ if ('submit' == $flag) {
 				$error = $task['error'];
 			}
 
+		} elseif ('update' == $action) {
+
+			/* 修改提交 */
+			$pid = GetGP('pid'); // project id
+			$tid = GetGP('tid'); // task id
+			if (0 < $pid && 0 < $tid) {
+
+				$task = validator_submit_task($data);
+				if (!isset($task['error']) && isset($task['ret'])) {
+
+					/* 验证成功 */
+
+					// 默认字段
+					$ret = $task['ret'];
+					$ret['modify_time'] = time();
+					// 组装SQL
+					$sql = 'UPDATE pw_teamtasks SET '.pwSqlSingle($ret).
+						   ' WHERE tid = '.pwEscape($tid).' AND pid = '.pwEscape($pid)." AND publisher_id = {$winduid}";
+					//echo $sql;exit;
+					// 修改数据
+					$query = $db->update($sql);
+					$rows = $db->affected_rows();
+					// 修改结果
+					if (is_numeric($rows) && 0 < $rows) {
+
+						header('Location: /twindex.php');
+						exit('redirecting...');
+
+					} else {
+
+						$task['error']['all'] = '哎呀,数据修改失败了!请备份内容,然后重新再试.';
+						$error = $task['error'];
+					}
+
+				} else {
+
+					/* 验证失败 */
+
+					$error = $task['error'];
+				}
+
+			} else {
+
+				// 非法操作
+				Showmsg('undefined_action');
+			}
+
 		} else {
 
 			// 非法操作
 			Showmsg('undefined_action');
 		}
-
-	} else {
-
-		// 非法操作
-		Showmsg('undefined_action');
 	}
+
+	// 载入用户
+	$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
+	$twusers = array();
+	while($twuser = $db->fetch_array($query)){
+		$twusers[] = $twuser;
+	}
+
+	// 载入项目(进行中)
+	$query = $db->query('SELECT * FROM pw_teamprojects WHERE status IN (0,1,2)');
+	$twprojects = array();
+	while($twproject = $db->fetch_array($query)){
+		$twprojects[] = $twproject;
+	}
+	
+	// 载入页面
+	require_once(PrintEot('twtask_post'));
+	
+	break;
+default:
+	//任务列表
+	InitGP(array('page','own','status','project','plan_start_time','real_start_time','plan_end_time','real_end_time','orderby'));
+	
+	if ($winddb['t_num']) {
+		$db_perpage = $winddb['t_num'];
+	}else{
+		$db_perpage = 20;
+	}
+	
+	$con		= array();
+	if($own==1){
+		$con[]	= "tt.owner_id = {$winduid}";
+	}
+	if($status!='' && is_numeric($status) && $status>=0){
+		$con[]	= "tt.status = {$status}";
+	}else{
+		//$con[]	= "tt.status in(0,1,2)";
+	}
+	if($plan_start_time!=''){
+		$con[]	= "tt.plan_start_time>=".strtotime($plan_start_time." 00:00:00");
+	}
+	if($real_start_time!=''){
+		$con[]	= "tt.real_start_time>=".strtotime($real_start_time." 00:00:00");
+	}
+	if($real_end_time!=''){
+		$con[]	= "tt.real_end_time>0 AND tt.real_end_time<=".strtotime($real_end_time." 00:00:00");
+	}
+	if($plan_end_time!=''){
+		$con[]	= "tt.plan_end_time>0 AND tt.plan_end_time<=".strtotime($plan_end_time." 00:00:00");
+	}
+	if($project!=''){
+		$con[]		= 'tp.projectname like "%'.$project.'%"';
+	}
+	$conSql		= "";
+	if(count($con)>0){
+		$conSql	= " WHERE ".implode(' AND ', $con);
+	}
+	
+	$orderSql	= "";
+	if($orderby=='create'){
+		$orderSql	= "tt.create_time DESC";
+	}else if($orderby=='start'){
+		$orderSql	= "tt.plan_start_time DESC";
+	}else{
+		$orderSql	= "tt.priority ASC";
+	}
+	$orderSql		= " ORDER BY ".$orderSql;
+	
+	
+	$sql		= "SELECT COUNT(*) AS cnt FROM pw_teamtasks AS tt";
+	if($project!=''){
+		$sql	.= " LEFT JOIN pw_teamprojects as tp on tt.pid = tp.pid";
+	}
+	$sql		.= $conSql;
+	
+	$rs 		= $db->get_one($sql);
+	$count 		= $rs['cnt'];
+	
+	(int)$page<1 && $page = 1;
+	$numofpage = ceil($count/$db_perpage);
+	$numofpage < 1 && $numofpage = 1;
+	if ($page > $numofpage) {
+		$page  = $numofpage;
+	}
+	$start_limit = intval(($page-1) * $db_perpage);
+	$totalpage	= min($numofpage,$db_maxpage);
+	
+	$limitSql	= " LIMIT {$start_limit},{$db_perpage}";
+	
+	$pages		= numofpage($count,$page,$numofpage,"twtask.php?{$urladd}&",$db_maxpage);
+	
+	$sql		= "SELECT tt.tid, tt.priority, tt.taskname, tt.plan_start_time, tt.real_start_time, tt.status, tt.create_time FROM pw_teamtasks AS tt";
+	if($project!=''){
+		$sql	.= " LEFT JOIN pw_teamprojects as tp on tt.pid = tp.pid";
+	}
+	$sql		.= $conSql.$orderSql.$limitSql;
+	$query 		= $db->query($sql);
+	$teamtaskdb = array();
+	while($teamtasks = $db->fetch_array($query)){
+		$teamtasks['priority'] = $teamwork_level[$teamtasks['priority']];
+		$teamtasks['statusname'] = $teamwork_status[$teamtasks['status']];
+		$teamtaskdb[] = $teamtasks;	
+	}
+	require_once PrintEot('tw_task_list');
+	break;
 }
 
-// 载入用户
-$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
-$twusers = array();
-while($twuser = $db->fetch_array($query)){
-	$twusers[] = $twuser;
-}
-
-// 载入项目(进行中)
-$query = $db->query('SELECT * FROM pw_teamprojects WHERE status IN (0,1,2)');
-$twprojects = array();
-while($twproject = $db->fetch_array($query)){
-	$twprojects[] = $twproject;
-}
-
-// 载入页面
-require_once(PrintEot('twtask_post'));
-
-// 公用页尾
 footer();
-
-
-
-// ==============================
-// 函数区 Function Area
-// ==============================
-
-
 
 /**
  * 任务表单字段的验证
@@ -313,3 +426,4 @@ function get_safe_string($input) {
 
 	return trim(strip_tags($input));
 }
+?>

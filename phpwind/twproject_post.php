@@ -6,10 +6,10 @@
  *
  * @author yumin
  * @package teamwork
- * @subpackage twproject
+ * @subpackage twproject_post
  */
 
-define('SCR','twproject');
+define('SCR','twproject_post');
 require_once('global.php');
 include_once(D_P.'data/bbscache/teamwork_config.php');
 require_once(R_P.'require/header.php');
@@ -44,8 +44,8 @@ if ('submit' != $flag) {
 			}
 
 			// 字段处理
-			$twproject['plan_start_time'] = date('Y-m-d', $twproject['plan_start_time']);
-			$twproject['plan_end_time'] = date('Y-m-d', $twproject['plan_end_time']);
+			$twproject['plan_start_time'] = (0 < $twtask['plan_start_time'] ? date('Y-m-d', $twtask['plan_start_time']) : '');
+			$twproject['plan_end_time'] = (0 < $twtask['plan_end_time'] ? date('Y-m-d', $twtask['plan_end_time']) : '');
 			// 页面输出
 			$data = $twproject;
 
@@ -123,8 +123,7 @@ if ('submit' == $flag) {
 				$ret = $project['ret'];
 				$ret['modify_time'] = time();
 				// 组装SQL
-				$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).
-					   ' WHERE pid ='.pwEscape($pid)." AND (publisher_id = {$winduid} OR owner_id = {$winduid})";
+				$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).' WHERE pid ='.pwEscape($pid)." AND (publisher_id = {$winduid} OR owner_id = {$winduid})";
 				//echo $sql;exit;
 				// 修改数据
 				$query = $db->update($sql);

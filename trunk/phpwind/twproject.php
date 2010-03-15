@@ -34,7 +34,7 @@ if ('submit' != $flag) {
 		$pid = GetGP('pid'); // project id
 		if (0 < $pid) {
 
-			$twproject = $db->get_one("SELECT * FROM pw_teamprojects WHERE pid = {$pid} AND publisher_id = {$winduid}");
+			$twproject = $db->get_one("SELECT * FROM pw_teamprojects WHERE pid = {$pid} AND (publisher_id = {$winduid} OR owner_id = {$winduid})");
 
 			// 数据为空
 			if (empty($twproject)) {
@@ -124,7 +124,7 @@ if ('submit' == $flag) {
 				$ret['modify_time'] = time();
 				// 组装SQL
 				$sql = 'UPDATE pw_teamprojects SET '.pwSqlSingle($ret).
-					   ' WHERE pid ='.pwEscape($pid)." AND publisher_id = {$winduid}";
+					   ' WHERE pid ='.pwEscape($pid)." AND (publisher_id = {$winduid} OR owner_id = {$winduid})";
 				//echo $sql;exit;
 				// 修改数据
 				$query = $db->update($sql);
@@ -237,7 +237,7 @@ function validator_submit_project($data){
 		if (0 < $start) {
 			$project['ret'][$key] = $start;
 		} else {
-			$project['error'][$key] = '计划起始时间转换失败';		
+			$project['ret'][$key] = 0;
 		}
 
 	} else {
@@ -252,7 +252,7 @@ function validator_submit_project($data){
 		if (0 < $end) {
 			$project['ret'][$key] = $end;
 		} else {
-			$project['error'][$key] = '计划截止时间转换失败';		
+			$project['ret'][$key] = 0;
 		}
 
 	} else {

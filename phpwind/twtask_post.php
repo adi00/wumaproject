@@ -76,47 +76,63 @@ if ('submit' == $flag) {
 
 			/* 验证成功 */
 
-			// 默认字段
 			$ret = $task['ret'];
-			$ret['publisher_id'] = $winduid;
-			$ret['create_time'] = time();
-			$ret['modify_time'] = time();
-			// 组装SQL
-			$sql = 'INSERT INTO pw_teamtasks (pid,taskname,owner,owner_id,priority,plan_start_time,'.
-				       'plan_end_time,real_start_time,real_end_time,remark,content,status,'.
-				       'publisher_id,create_time,modify_time) VALUES'. pwSqlMulti(array($ret));
-			//echo $sql;exit;
-			// 写入数据
-			$db->update($sql);
-			$tid = $db->insert_id();
-			// 写入结果
-			if (is_numeric($tid) && 0 < $tid) {
+			if (is_array($ret['owners'])) {
 
-				// 是否关联修改项目的实际开始时间
-				if (0 < $ret['pid'] && 0 < $ret['real_start_time']) {
+				for ($i=0; $i<sizeof($ret['owners']); $i++) {
 
-					$sql = 'SELECT COUNT(*) AS cnt FROM pw_teamtasks WHERE pid = '.$ret['pid'];
-					$rs = $db->get_one($sql);
-					if (1 == $rs['cnt']) {
+					// 默认字段
+					$ret['publisher_id'] = $winduid;
+					$ret['create_time'] = time();
+					$ret['modify_time'] = time();
+					$ret['owner_id'] = $ret['owners'][$i];
+					$ret_temp = $ret;
+					array_shift($ret_temp);
+					$temp[] = pwSqlMulti(array($ret_temp));
+				}
 
-						$sql = 'UPDATE pw_teamprojects SET real_start_time = '.$ret['real_start_time'].' WHERE pid = '.$ret['pid'];
+				$temp = implode(',', $temp);
+				// 组装SQL
+				$sql = 'INSERT INTO pw_teamtasks (pid,taskname,owner,priority,plan_start_time,plan_end_time,real_start_time,real_end_time,remark,content,status,publisher_id,create_time,modify_time,owner_id) VALUES'.$temp;
+
+				// 写入数据
+				$db->update($sql);
+				$tid = $db->insert_id();
+
+				// 写入结果
+				if (!empty($tid) && is_numeric($tid) && 0 < $tid) {
+
+					// 是否关联修改项目的实际开始时间
+					if (0 < $ret['pid'] && 0 < $ret['real_start_time']) {
+
+						$sql = 'SELECT COUNT(*) AS cnt FROM pw_teamtasks WHERE pid = '.$ret['pid'];
+						$rs = $db->get_one($sql);
+						if (1 == $rs['cnt']) {
+
+							$sql = 'UPDATE pw_teamprojects SET real_start_time = '.$ret['real_start_time'].' WHERE pid = '.$ret['pid'];
+							$db->update($sql);
+						}
+					}
+
+					// 是否关联修改项目的实际结束时间
+					if (0 < $ret['pid'] && 0 < $ret['real_end_time']) {
+
+						$sql = 'UPDATE pw_teamprojects SET real_end_time = '.$ret['real_end_time'].' WHERE pid = '.$ret['pid'];
 						$db->update($sql);
 					}
+
+					header('Location: /twindex.php');
+					exit('redirecting...');
+
+				} else {
+
+					$task['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
+					$error = $task['error'];
 				}
-
-				// 是否关联修改项目的实际结束时间
-				if (0 < $ret['pid'] && 0 < $ret['real_end_time']) {
-
-					$sql = 'UPDATE pw_teamprojects SET real_end_time = '.$ret['real_end_time'].' WHERE pid = '.$ret['pid'];
-					$db->update($sql);
-				}
-
-				header('Location: /twindex.php');
-				exit('redirecting...');
 
 			} else {
 
-				$task['error']['all'] = '哎呀,数据写入失败了!请备份内容,然后重新再试.';
+				$task['error']['all'] = '哎呀,负责人字段格式出错了!';
 				$error = $task['error'];
 			}
 
@@ -235,11 +251,26 @@ footer();
  */
 function validator_submit_task($data){
 
+	global $action;
+
 	// 综合验证
 	if (empty($data)) {
 		$task['error']['all'] = '服务器只是个传说,啥都没填写的话,就别提交了嘛!';
 		return $task;
 	}
+
+	// 负责人
+	$key = 'owner_id';
+	if (isset($data[$key]) && 0 < $data[$key]) {
+		if ('add' == $action) {
+			$task['ret']['owners'] = (!is_array($data[$key]) ? array($data[$key]) : $data[$key]);
+		} elseif ('update' == $action) {
+			$task['ret']['owner_id'] = $data[$key];
+		}
+	} else {
+		$task['error'][$key] = '负责人是必选项';
+	}
+	//print_r($task['ret']['owner_id']);exit;
 
 	// 所属项目
 	$key = 'pid';
@@ -263,14 +294,6 @@ function validator_submit_task($data){
 		$task['ret'][$key] = get_safe_string($data[$key]);
 	} else {
 		$task['ret'][$key] = '';
-	}
-
-	// 负责人
-	$key = 'owner_id';
-	if (isset($data[$key]) && 0 < $data[$key]) {
-		$task['ret'][$key] = $data[$key];
-	} else {
-		$task['error'][$key] = '负责人是必选项';
 	}
 
 	// 优先级

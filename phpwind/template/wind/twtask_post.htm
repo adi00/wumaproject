@@ -102,7 +102,25 @@ foreach($twusers as $twuser) {
 $owner_id_checked = (isset($data[owner_id]) && $twuser[uid]==$data[owner_id] ? 'checked' : '');
 print <<<EOT
 -->
+
+<!-- 
+EOT;
+if ('add' == $action) {
+print <<<EOT
+-->
+			<input value="$twuser[uid]" type="checkbox" name="owner_id[]" id="owner_id" $owner_id_checked />&nbsp;$twuser[username]&nbsp;&nbsp;
+<!--
+EOT;
+} elseif ('update' == $action)  {
+print <<<EOT
+-->
 			<input value="$twuser[uid]" type="radio" name="owner_id" id="owner_id" $owner_id_checked />&nbsp;$twuser[username]&nbsp;&nbsp;
+<!--
+EOT;
+}
+print <<<EOT
+-->
+
 <!--
 EOT;
 }

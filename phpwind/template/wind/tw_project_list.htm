@@ -1,0 +1,197 @@
+<!--<?php print <<<EOT
+-->
+<div id="breadCrumb">
+		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a href="twindex.php" title="teamwork首页">teamwork首页</a> &raquo; 项目列表
+</div>
+
+
+<div style="padding-top:8px;" class="cc">
+    <span class="fl">$pages</span>
+</div>
+
+
+<div class="t" style="margin-bottom:0px;margin-top:8px;"><table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="h" colspan="12">
+<form action="twproject.php">
+<select name="own">
+<option value="">全部任务</option>
+<!--
+EOT;
+if($own==$winduid){
+print <<<EOT
+-->
+<option value="1" selected>我负责的任务</option>
+<!--
+EOT;
+}else{
+print <<<EOT
+-->
+<option value="1">我负责的任务</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</select>
+<select name="status">
+<option value="-1">全部</option>
+<!--
+EOT;
+foreach($teamwork_status as $tk=>$tv){
+print <<<EOT
+-->
+
+<!--
+EOT;
+if($status==$tk){
+print <<<EOT
+-->
+<option value="$tk" selected>$tv</option>
+<!--
+EOT;
+}else{
+print <<<EOT
+-->
+<option value="$tk">$tv</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</select>
+项目名称：<input type="text" name="project" value="$project" />
+计划时间：<input type="text" name="plan_start_time" value="$start" id="fromDt1" style="width:80px" /><img src="images/icon_date.gif" id="fromDtBtn1" align="absmiddle" />-<input type="text" name="plan_end_time" value="$end" id="toDt1" style="width:80px" /><img src="images/icon_date.gif" id="toDtBtn1" align="absmiddle" />
+<input type="submit" value="搜索" />
+</form>
+<a href="twproject_post.php?action=add" style="text-align:right;">新项目</a>
+</td></tr>
+<tr class="tr2">
+<td class="tal y-style">任务优先级</td>
+<td class="tal y-style">任务状态</td>
+<td class="tal y-style">任务名称</td>
+<td class="tal y-style">计划开始时间</td>
+<td class="tal y-style">实际开始时间</td>
+<td class="tal y-style">创建时间</td>
+</tr>
+<!--
+EOT;
+$i=0;
+foreach($projects as $project){
+$i++;
+$class=$i%2==0 ? "f_two" : "f_one";
+print <<<EOT
+-->
+<tr class="tr3 $class">
+<td>
+<a><b>$project[priority]</b></a></td>
+<td class="tal y-style">
+<!--
+EOT;
+if($project[status]==1){
+	$color="green";
+}elseif($project[status]==2){
+	$color="#CC0033";
+}else{
+	$color="#000000";
+}
+print <<<EOT
+-->
+<font color="$color">
+$project[statusname]</font></td>
+<!--
+EOT;
+$plan_start_time = 0;
+$real_start_time = 0;
+$create_time = 0;
+if( $project[plan_start_time] > 0 ){
+	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
+}
+if( $project[real_start_time] > 0 ){
+	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
+}
+if( $project[create_time] > 0 ){
+	$create_time = date("Y-m-d H:i:s", $project[create_time]);
+}
+print <<<EOT
+-->
+<td ><a href="twproject.php?action=detail&pid=$project[pid]" target="_blank">$project[projectname]</a></td>
+<td class="tal y-style">$plan_start_time</td>
+<td class="tal y-style">$real_start_time</td>
+<td class="tal y-style">$create_time</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table></div>
+
+<div style="padding-top:8px;" class="cc">
+    <span class="fl">$pages</span>
+</div>
+
+
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td colspan="12" height="20"></td></tr>
+</table>
+
+<!--
+EOT;
+?>-->
+
+<style type="text/css">@import url(images/calendar.css);</style>
+<script type="text/javascript" src="js/calendar.js"></script>
+<script type="text/javascript" src="js/calendar-zh-cn_utf-8.js"></script>
+<script type="text/javascript" src="js/calendar-setup.js"></script>
+<script type="text/javascript">
+if(document.getElementById("fromDt1")!=null){
+	Calendar.setup({
+		inputField     :    'fromDt1',   // id of the input field
+		button         :    'fromDtBtn1',
+		ifFormat       :    "%Y-%m-%d",       // format of the input field
+		weekNumbers    :    false,
+		showsTime      :    false,
+		timeFormat     :    "24",
+		singleClick    :    true
+	});
+} 
+if(document.getElementById("toDt1")!=null){
+	Calendar.setup({
+		inputField     :    'toDt1',   // id of the input field
+		button         :    'toDtBtn1',
+		ifFormat       :    "%Y-%m-%d",       // format of the input field
+		weekNumbers    :    false,
+		showsTime      :    false,
+		timeFormat     :    "24",
+		singleClick    :    true
+	});
+}
+if(document.getElementById("fromDt2")!=null){
+	Calendar.setup({
+		inputField     :    'fromDt2',   // id of the input field
+		button         :    'fromDtBtn2',
+		ifFormat       :    "%Y-%m-%d",       // format of the input field
+		weekNumbers    :    false,
+		showsTime      :    false,
+		timeFormat     :    "24",
+		singleClick    :    true
+	});
+} 
+if(document.getElementById("toDt2")!=null){
+	Calendar.setup({
+		inputField     :    'toDt2',   // id of the input field
+		button         :    'toDtBtn2',
+		ifFormat       :    "%Y-%m-%d",       // format of the input field
+		weekNumbers    :    false,
+		showsTime      :    false,
+		timeFormat     :    "24",
+		singleClick    :    true
+	});
+}
+</script>

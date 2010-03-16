@@ -34,6 +34,9 @@ switch ($action) {
             ShowMsg('No Project Found');
         }
         
+        $project['priority'] = $teamwork_level[$project['priority']];
+		$project['statusname'] = $teamwork_status[$project['status']];
+        
         /** render template */
         require_once PrintEot('tw_project_detail');
         break;
@@ -42,10 +45,16 @@ switch ($action) {
     default:
         
         /** get some parameters from request */
-        InitGP(array('page', 'own', 'status', 'priority', 'start', 'end', 'orderby'));
+        InitGP(array('page', 'own', 'status', 'priority', 'start', 'end', 'orderby', 'project'));
         
         /** just make a bobo sql */
         $where = 'WHERE 1=1';
+        
+        /** search by name */
+        if (!empty($project)) {
+            $where .= " AND projectname LIKE '%" 
+                . str_replace(array('"', "'", '%', '?', '*'), '', $project) . "%'";
+        }
         
         /** fetch by owner */
         if (!empty($own)) {
@@ -108,9 +117,9 @@ switch ($action) {
         }
         
         /** project per size */
-        $page_size = 20;
+        $db_perpage = 20;
         if ($winddb['t_num']) {
-			$page_size = $winddb['t_num'];
+			$db_perpage = $winddb['t_num'];
 		}
         
         /** page to make */
@@ -119,12 +128,27 @@ switch ($action) {
             $page = max(intval($page), 1);
         }
         
+        /** make page nav */
+        $count_sql = 'SELECT COUNT(pid) AS num FROM pw_teamprojects ' . $where;
+        $count_result = $db->get_one($count_sql);
+        $count = $count_result['num'];
+        $total_page = ceil($count / $page_size);
+        
+        $pages		= numofpage($count, $page, $total_page, "twproject.php?{$urladd}&", $db_maxpage);
+        
         /** make query sql */
         $sql = 'SELECT * FROM pw_teamprojects ' . $where . $order . ' LIMIT ' 
-            . $page_size . ' OFFSET ' . ($page - 1) * $page_size;
+            . $db_perpage . ' OFFSET ' . ($page - 1) * $db_perpage;
             
         /** get data */
-        $projects = $db->fetch($sql, array());
+        $query = $db->query($sql);
+		$projects = array();
+        
+		while ($project = $db->fetch_array($query)) {
+			$project['priority'] = $teamwork_level[$project['priority']];
+			$project['statusname'] = $teamwork_status[$project['status']];
+			$projects[] = $project;
+		}
         
         /** render template */
         require_once PrintEot('tw_project_list');

@@ -1,0 +1,109 @@
+<!--<?php print <<<EOT
+-->
+<div id="breadCrumb">
+		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a href="twindex.php" title="teamwork首页">teamwork首页</a> &raquo; <a href="twproject.php" title="项目列表">项目列表</a> &raquo; $project[projectname]&nbsp;&nbsp;&nbsp;[<a href="twproject_post.php?action=update&pid=$project[pid]">修改</a>]
+</div>
+
+
+<!--
+EOT;
+$plan_start_time = '-';
+$plan_end_time = '-';
+$real_start_time = '-';
+$real_end_time = '-';
+$create_time = '-';
+if( $project[plan_start_time] > 0 ){
+	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
+}
+if( $project[plan_end_time] > 0 ){
+	$plan_end_time = date("Y-m-d H:i:s", $project[plan_end_time]);
+}
+if( $project[real_start_time] > 0 ){
+	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
+}
+if( $project[real_end_time] > 0 ){
+	$real_end_time = date("Y-m-d H:i:s", $project[real_end_time]);
+}
+if( $project[create_time] > 0 ){
+	$create_time = date("Y-m-d H:i:s", $project[create_time]);
+}
+print <<<EOT
+-->
+<table cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="h" width="300"><b>$project[projectname]</b></td>
+			<td class="h tar"></td>
+		</tr>
+		<tr class="tr3">
+			<td>项目起止时间:</td>
+			<td>
+			$plan_start_time 至 $plan_end_time
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>实际起止时间:</td>
+			<td>
+			 $real_start_time 至 $real_end_time
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>负责人:</td>
+			<td>
+			$project[owner]
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>优先级:</td>
+			<td>
+			$project[priority] 
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>任务当前状态:</td>
+			<td>
+			<div id="txtStatus"><span onclick="showEditStatus()">$project[statusname]</span></div>
+			<div id="selStatus" style="display:none">
+			<select name="status" id="status">
+<!--
+EOT;
+foreach($teamwork_status as $key=>$val) {
+$status_selected = (isset($project[status]) && $key==$project[status] ? 'selected' : '');
+print <<<EOT
+-->
+				<option value="$key" $status_selected>$val</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</select>
+			<a href="javascript:setStatus($project[pid])">保存</a>
+			<a href="javascript:resetStatus()">取消</a>
+			</div>
+			</td>
+		</tr>
+        <tr class="tr3">
+			<td>WIKI地址:</td>
+			<td>
+			$project[wiki]
+			</td>
+		</tr>
+        <tr class="tr3">
+			<td>SVN地址:</td>
+			<td>
+			$project[svn]
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>项目备注:</td>
+			<td>
+			$project[remark]
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!--
+EOT;
+?>-->
+<script type="text/javascript" src="js/twtask.js"></script>

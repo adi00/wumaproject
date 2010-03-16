@@ -44,42 +44,7 @@ print <<<EOT
 		<tr class="tr3">
 			<td>实际起止时间:</td>
 			<td>
-<!--
-EOT;
-if($real_start_time=='-'){
-print <<<EOT
--->
-<a href="javascript:setRealStartTime($teamtask[tid])">设置实际开始时间</a>
-<!--
-EOT;
-}else{
-print <<<EOT
--->
-$real_start_time
-<!--
-EOT;
-}
-print <<<EOT
--->
-			 至 
-			 
-			<!--
-EOT;
-if($real_end_time=='-'){
-print <<<EOT
--->
-<a href="javascript:setRealEndTime($teamtask[tid])">设置实际结束时间</a>
-<!--
-EOT;
-}else{
-print <<<EOT
--->
-$real_end_time
-<!--
-EOT;
-}
-print <<<EOT
--->
+			 $real_start_time 至 $real_end_time
 			</td>
 		</tr>
 		<tr class="tr3">
@@ -91,6 +56,7 @@ print <<<EOT
 		<tr class="tr3">
 			<td>负责人:</td>
 			<td>
+			$teamtask[owner]
 			</td>
 		</tr>
 		<tr class="tr3">

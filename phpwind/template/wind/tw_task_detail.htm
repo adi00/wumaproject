@@ -1,7 +1,7 @@
 <!--<?php print <<<EOT
 -->
 <div id="breadCrumb">
-		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a href="twindex.php" title="teamwork首页">teamwork首页</a> &raquo; <a href="twtask.php" title="任务列表">任务列表</a> &raquo; $teamtask[taskname]
+		<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; <a href="twindex.php" title="teamwork首页">teamwork首页</a> &raquo; <a href="twtask.php" title="任务列表">任务列表</a> &raquo; $teamtask[taskname]&nbsp;&nbsp;&nbsp;[<a href="twtask_post.php?action=update&tid=$teamtask[tid]">修改</a>]
 </div>
 
 
@@ -32,7 +32,7 @@ print <<<EOT
 <table cellspacing="0" width="100%">
 	<tbody>
 		<tr>
-			<td class="h"><b>$teamtask[taskname]</b></td>
+			<td class="h" width="300"><b>$teamtask[taskname]</b></td>
 			<td class="h tar"></td>
 		</tr>
 		<tr class="tr3">

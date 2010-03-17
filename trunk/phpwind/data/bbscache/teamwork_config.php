@@ -4,7 +4,7 @@
 //error_reporting('ALL');
 
 // 统一的权限判断
-//$_G['allowmember']==0 && Showmsg('teamwork_denied');
+$_G['allowmember']==0 && Showmsg('teamwork_denied');
 
 // set time zone
 date_default_timezone_set('Asia/Shanghai');

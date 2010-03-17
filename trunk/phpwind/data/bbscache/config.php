@@ -496,14 +496,14 @@ $db_footnav=array(
 );
 $db_pcids='1,2';
 $db_shortcutforum=array(
-	'19' => '美食',
-	'26' => '团购',
-	'24' => '婚庆',
-	'27' => '活动',
-	'25' => '团购活动',
-	'20' => '母婴',
+	'34' => '社区门户模式',
+	'35' => '社区门户模式在版块中隐藏',
+	'36' => 'aa',
+	'37' => 'bb',
+	'1' => '介绍',
+	'2' => '新功能介绍',
 );
-$db_app_register_time='1267153191';
+$db_app_register_time='1268619320';
 $db_advertdb=array(
 );
 $db_windcode=array(

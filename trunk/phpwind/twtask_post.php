@@ -39,7 +39,7 @@ if ('submit' != $flag) {
 			// 数据为空
 			if (empty($twtask)) {
 
-				header('Location: /twindex.php');
+				header('Location: twindex.php');
 				exit('redirecting...');
 			}
 
@@ -121,7 +121,7 @@ if ('submit' == $flag) {
 						$db->update($sql);
 					}
 
-					header('Location: /twindex.php');
+					header('Location: twindex.php');
 					exit('redirecting...');
 
 				} else {
@@ -185,7 +185,7 @@ if ('submit' == $flag) {
 						$db->update($sql);
 					}
 
-					header('Location: /twindex.php');
+					header('Location: twindex.php');
 					exit('redirecting...');
 
 				} else {
@@ -215,7 +215,7 @@ if ('submit' == $flag) {
 }
 
 // 载入用户
-$query = $db->query('SELECT * FROM pw_members WHERE groupid = 3 AND username != "admin"');
+$query = $db->query('SELECT * FROM pw_members ');
 $twusers = array();
 while($twuser = $db->fetch_array($query)){
 	$twusers[] = $twuser;

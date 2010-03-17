@@ -39,3 +39,18 @@ Query Error: SELECT tp.priority, tp.projectname, tp.status FROM pw_teamprojects 
 Query Error: SELECT tt.priority, tt.taskname, tt.status FROM pw_teamtaks AS tt WHERE owner_id = 1
 Query Error: SELECT tt.priority, tt.taskname, tt.status, tt.plan_start_time, tt.real_start_time, tt,status, tt.create_time FROM pw_teamtasks AS tt WHERE owner_id = 1 and tt.status in(0,1,2)
 Query Error: SELECT tt.priority, tt.taskname, tt.status, tt.plan_start_time, tt.real_start_time, tt,status, tt.create_time FROM pw_teamtasks AS tt WHERE owner_id = 1 and status in(0,1,2)
+Query Error: UPDATE pw_teamtasks SET real_start_time=1268707471,modify_time=1268707471 WHERE tid=10 AND owner_id=1
+Query Error: UPDATE pw_teamtasks SET real_end_time=1268707473,modify_time=1268707473 WHERE tid=10 AND owner_id=1
+Query Error: UPDATE pw_teamtasks SET real_start_time=1268707474,modify_time=1268707474 WHERE tid=10 AND owner_id=1
+Query Error: UPDATE pw_teamtasks SET real_start_time=1268707492,modify_time=1268707492 WHERE tid=10 AND owner_id=1
+Query Error: UPDATE pw_teamtasks SET real_start_time=1268707497,modify_time=1268707497 WHERE tid=10 AND owner_id=1
+Query Error: INSERT INTO pw_teamtasks (pid,taskname,owner,priority,plan_start_time,plan_end_time,real_start_time,real_end_time,remark,content,status,publisher_id,create_time,modify_time,owner_id) VALUES ('1','aaaa','','5','1267459200','1268841600','1267459200','1269964800','sdfasdfasd','asdfasdf','2','1','1268794461','1268794461','1') 
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10
+Query Error: SELECT tp.pid, tp.priority, tp.projectname, tp.plan_start_time, tp.real_start_time, tp.status, tp.create_time FROM pw_teamprojects AS tp WHERE tp.owner_id =  order by tp.priority asc limit 10

@@ -16,7 +16,7 @@ require_once(R_P.'require/header.php');
 
 // 基础数据
 $action = GetGP('action'); // add,update
-$actionTitle = ('add' == $action ? '发布新项目' : ('update' == $action ? '修改项目中' : '未知'));
+$actionTitle = ('add' == $action ? '添加新项目' : ('update' == $action ? '修改项目中' : '未知'));
 $data = $_POST;
 $flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
 
@@ -44,8 +44,9 @@ if ('submit' != $flag) {
 			}
 
 			// 字段处理
-			$twproject['plan_start_time'] = (0 < $twtask['plan_start_time'] ? date('Y-m-d', $twtask['plan_start_time']) : '');
-			$twproject['plan_end_time'] = (0 < $twtask['plan_end_time'] ? date('Y-m-d', $twtask['plan_end_time']) : '');
+			$twproject['plan_start_time'] = (0 < $twproject['plan_start_time'] ? date('Y-m-d', $twproject['plan_start_time']) : '');
+			$twproject['plan_end_time'] = (0 < $twproject['plan_end_time'] ? date('Y-m-d', $twproject['plan_end_time']) : '');
+
 			// 页面输出
 			$data = $twproject;
 

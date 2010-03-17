@@ -110,13 +110,13 @@ $plan_start_time = 0;
 $real_start_time = 0;
 $create_time = 0;
 if( $project[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $project[plan_start_time]);
+	$plan_start_time = date("Y-m-d", $project[plan_start_time]);
 }
 if( $project[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $project[real_start_time]);
+	$real_start_time = date("Y-m-d", $project[real_start_time]);
 }
 if( $project[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $project[create_time]);
+	$create_time = date("Y-m-d", $project[create_time]);
 }
 print <<<EOT
 -->

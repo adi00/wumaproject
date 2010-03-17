@@ -13,19 +13,19 @@ $real_start_time = '-';
 $real_end_time = '-';
 $create_time = '-';
 if( $teamtask[plan_start_time] > 0 ){
-	$plan_start_time = date("Y-m-d H:i:s", $teamtask[plan_start_time]);
+	$plan_start_time = date("Y-m-d", $teamtask[plan_start_time]);
 }
 if( $teamtask[plan_end_time] > 0 ){
-	$plan_end_time = date("Y-m-d H:i:s", $teamtask[plan_end_time]);
+	$plan_end_time = date("Y-m-d", $teamtask[plan_end_time]);
 }
 if( $teamtask[real_start_time] > 0 ){
-	$real_start_time = date("Y-m-d H:i:s", $teamtask[real_start_time]);
+	$real_start_time = date("Y-m-d", $teamtask[real_start_time]);
 }
 if( $teamtask[real_end_time] > 0 ){
-	$real_end_time = date("Y-m-d H:i:s", $teamtask[real_end_time]);
+	$real_end_time = date("Y-m-d", $teamtask[real_end_time]);
 }
 if( $teamtask[create_time] > 0 ){
-	$create_time = date("Y-m-d H:i:s", $teamtask[create_time]);
+	$create_time = date("Y-m-d", $teamtask[create_time]);
 }
 print <<<EOT
 -->
@@ -87,12 +87,6 @@ print <<<EOT
 			<a href="javascript:setStatus($teamtask[tid])">保存</a>
 			<a href="javascript:resetStatus()">取消</a>
 			</div>
-			</td>
-		</tr>
-		<tr class="tr3">
-			<td>任务内容:</td>
-			<td>
-			$teamtask[content]
 			</td>
 		</tr>
 		<tr class="tr3">

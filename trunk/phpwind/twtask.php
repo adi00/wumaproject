@@ -5,6 +5,13 @@ require_once('global.php');
 @include_once(D_P.'data/bbscache/teamwork_config.php');;
 require_once(R_P.'require/header.php');
 
+// 载入用户
+$query = $db->query('SELECT * FROM pw_members ');
+$twusers = array();
+while($twuser = $db->fetch_array($query)){
+	$twusers[$twuser['uid']] = $twuser['username'];
+}
+
 InitGP(array('action'));
 switch ($action) {
 	case 'detail':
@@ -20,6 +27,7 @@ switch ($action) {
 		}
 		$teamtask['priority'] = $teamwork_level[$teamtask['priority']];
 		$teamtask['statusname'] = $teamwork_status[$teamtask['status']];
+		$teamtask['owner'] = $twusers[$teamtask['owner_id']];
 		require_once PrintEot('tw_task_detail');
 		break;
 	case 'srst':

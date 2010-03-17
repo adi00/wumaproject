@@ -17,6 +17,13 @@ require_once(R_P.'require/header.php');
 
 InitGP(array('action'));
 
+// 载入用户
+$query = $db->query('SELECT * FROM pw_members ');
+$twusers = array();
+while($twuser = $db->fetch_array($query)){
+	$twusers[$twuser['uid']] = $twuser['username'];
+}
+
 switch ($action) {
 
     /** for detail page show */
@@ -36,6 +43,7 @@ switch ($action) {
         
         $project['priority'] = $teamwork_level[$project['priority']];
 		$project['statusname'] = $teamwork_status[$project['status']];
+		$project['owner'] = $twusers[$project['owner_id']];
         
         /** render template */
         require_once PrintEot('tw_project_detail');

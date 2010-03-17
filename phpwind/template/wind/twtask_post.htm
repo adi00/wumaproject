@@ -4,19 +4,6 @@
 <script src="js/kissy/editor-min.js"></script>
 <script>
 KISSY.ready(function(S) {
-    S.Editor('content', {
-        base: 'js/kissy/',
-        pluginsConfig: {
-            image: {
-                tabs : ['link'],
-            },
-            smiley: {
-                tabs : ['wangwang']
-            }
-        }
-    });
-});
-KISSY.ready(function(S) {
     S.Editor('remark', {
         base: 'js/kissy/',
         pluginsConfig: {
@@ -60,16 +47,8 @@ print <<<EOT
 			<td class="h tar"><span class="fr">标<font color="red">*</font>为必填项</span></td>
 		</tr>
 		<tr class="tr3">
-			<td>计划起止时间:</td>
-			<td>
-			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="1" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="2" readonly="readonly" />&nbsp;<font color="red">$error[plan_start_time]</font>
-			</td>
-		</tr>
-		<tr class="tr3">
-			<td>实际起止时间:</td>
-			<td>
-			<input value="$data[real_start_time]" class="input" type="text" name="real_start_time" id="real_start_time" onfocus="setDate(this)" size="15" tabindex="3" readonly="readonly" /> 至 <input value="$data[real_end_time]" class="input" type="text" name="real_end_time" id="real_end_time" onfocus="setDate(this)" size="15" tabindex="4" readonly="readonly" />&nbsp;(操作此项或会修改关联项目的实际起止时间)&nbsp;<font color="red">$error[real_start_time]</font>
-			</td>
+			<td><font color="red">*</font>&nbsp;任务名称:</td>
+			<td><input value="$data[taskname]" class="input" type="text" name="taskname" id="taskname" size="50" tabindex="1" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[taskname]</font></td>
 		</tr>
 		<tr class="tr3">
 			<td>所属项目:</td>
@@ -88,10 +67,6 @@ print <<<EOT
 -->
 			&nbsp;<font color="red">$error[pid]</font>
 			</td>
-		</tr>
-		<tr class="tr3">
-			<td><font color="red">*</font>&nbsp;任务名称:</td>
-			<td><input value="$data[taskname]" class="input" type="text" name="taskname" id="taskname" size="50" tabindex="5" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[taskname]</font></td>
 		</tr>
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;负责人:</td>
@@ -132,7 +107,7 @@ print <<<EOT
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;优先级:</td>
 			<td>
-			<select tabindex="6" name="priority" id="priority">
+			<select tabindex="2" name="priority" id="priority">
 			<option value="-1">请选择</option>
 <!--
 EOT;
@@ -149,6 +124,28 @@ print <<<EOT
 			</select>&nbsp;(P0最紧急)&nbsp;<font color="red">$error[priority]</font>
 			</td>
 		</tr>
+		<tr class="tr3">
+			<td>计划起止时间:</td>
+			<td>
+			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="3" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="4" readonly="readonly" />&nbsp;<font color="red">$error[plan_start_time]</font>
+			</td>
+		</tr>
+<!--
+EOT;
+if ('update' == $action)  {
+print <<<EOT
+-->
+		<tr class="tr3">
+			<td>实际起止时间:</td>
+			<td>
+			<input value="$data[real_start_time]" class="input" type="text" name="real_start_time" id="real_start_time" onfocus="setDate(this)" size="15" tabindex="5" readonly="readonly" /> 至 <input value="$data[real_end_time]" class="input" type="text" name="real_end_time" id="real_end_time" onfocus="setDate(this)" size="15" tabindex="6" readonly="readonly" />&nbsp;(操作此项或会修改关联项目的实际起止时间)&nbsp;<font color="red">$error[real_start_time]</font>
+			</td>
+		</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;任务当前状态:</td>
 			<td>
@@ -170,15 +167,9 @@ print <<<EOT
 			</td>
 		</tr>
 		<tr class="tr3">
-			<td>任务内容:</td>
-			<td>
-			<textarea rows="10" cols="76" class="input" style="width: 690px" name="content" id="content" tabindex="8">$data[content]</textarea>
-			</td>
-		</tr>
-		<tr class="tr3">
 			<td>任务备注:</td>
 			<td>
-			<textarea rows="10" cols="76" class="input" style="width: 690px" name="remark" id="remark" tabindex="9">$data[remark]</textarea>
+			<textarea rows="10" cols="76" class="input" style="width: 690px" name="remark" id="remark" tabindex="8">$data[remark]</textarea>
 			</td>
 		</tr>
 		<tr class="tr3">

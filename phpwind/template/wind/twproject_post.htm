@@ -47,14 +47,8 @@ print <<<EOT
 			<td class="h tar"><span class="fr">标<font color="red">*</font>为必填项</span></td>
 		</tr>
 		<tr class="tr3">
-			<td><font color="red">*</font>&nbsp;计划起止时间:</td>
-			<td>
-			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="1" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="2" readonly="readonly" />&nbsp;(计划截止时间可不填)&nbsp;<font color="red">$error[plan_start_time]</font>
-			</td>
-		</tr>
-		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;项目名称:</td>
-			<td><input value="$data[projectname]" class="input" type="text" name="projectname" id="projectname" size="50" tabindex="3" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[projectname]</font></td>
+			<td><input value="$data[projectname]" class="input" type="text" name="projectname" id="projectname" size="50" tabindex="1" maxlength="30" />&nbsp;(限30字以内)&nbsp;<font color="red">$error[projectname]</font></td>
 		</tr>
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;负责人:</td>
@@ -77,7 +71,7 @@ print <<<EOT
 		<tr class="tr3">
 			<td><font color="red">*</font>&nbsp;优先级:</td>
 			<td>
-			<select tabindex="4" name="priority" id="priority">
+			<select tabindex="2" name="priority" id="priority">
 			<option value="-1">请选择</option>
 <!--
 EOT;
@@ -92,6 +86,12 @@ EOT;
 print <<<EOT
 -->
 			</select>&nbsp;(P0最紧急)&nbsp;<font color="red">$error[priority]</font>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><font color="red">*</font>&nbsp;计划起止时间:</td>
+			<td>
+			<input value="$data[plan_start_time]" class="input" type="text" name="plan_start_time" id="plan_start_time" onfocus="setDate(this)" size="15" tabindex="3" readonly="readonly" /> 至 <input value="$data[plan_end_time]" class="input" type="text" name="plan_end_time" id="plan_end_time" onfocus="setDate(this)" size="15" tabindex="4" readonly="readonly" />&nbsp;(计划截止时间可不填)&nbsp;<font color="red">$error[plan_start_time]</font>
 			</td>
 		</tr>
 		<tr class="tr3">

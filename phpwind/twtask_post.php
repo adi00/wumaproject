@@ -16,7 +16,7 @@ require_once(R_P.'require/header.php');
 
 // 基础数据
 $action = GetGP('action'); // add,update
-$actionTitle = ('add' == $action ? '发布新任务' : ('update' == $action ? '修改任务中' : '未知'));
+$actionTitle = ('add' == $action ? '添加新任务' : ('update' == $action ? '修改任务中' : '未知'));
 $data = $_POST;
 $flag = (isset($data['flag']) ? $data['flag'] : '_nothing');
 

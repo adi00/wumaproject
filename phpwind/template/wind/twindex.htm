@@ -5,8 +5,8 @@
 </div>
 
 <div class="t" style="margin-bottom:0px;"><table width="100%" cellspacing="0" cellpadding="0">
-<tr><td class="h" colspan="12">我的任务
-<a href="twtask_post.php?action=add" style="text-align:right;">新任务</a>
+		<tr><td class="h" colspan="12"><h2>我的任务</h2>
+<a href="twtask_post.php?action=add" style="text-align:right;">添加新任务</a>
 </td></tr>
 <tr class="tr2">
 <td class="tal y-style">任务优先级</td>
@@ -24,9 +24,9 @@ $i++;
 $class=$i%2==0 ? "f_two" : "f_one";
 print <<<EOT
 -->
-<tr class="tr3 $class">
+<tr class="tr3 $class" >
 <td>
-<a><b>$teamtask[priority]</b></a></td>
+<b>$teamtask[priority]</b></td>
 <td class="tal y-style">
 <!--
 EOT;
@@ -57,7 +57,10 @@ if( $teamtask[create_time] > 0 ){
 }
 print <<<EOT
 -->
-<td ><a href="twtask.php?action=detail&tid=$teamtask[tid]" target="_blank">$teamtask[taskname]</a></td>
+<td >
+<span class="forumslink s5">	
+<a href="twtask.php?action=detail&tid=$teamtask[tid]">$teamtask[taskname]</a></td>
+</span>
 <td class="tal y-style">$plan_start_time</td>
 <td class="tal y-style">$real_start_time</td>
 <td class="tal y-style">$create_time</td>
@@ -79,8 +82,8 @@ print <<<EOT
 </table>
 
 <div class="t"><table width="100%" cellspacing="0" cellpadding="0">
-<tr><td class="h" colspan="12">我的项目
-<a href="twproject_post.php?action=add" style="text-align:right;">新项目</a></td></tr>
+		<tr><td class="h" colspan="12"><h2>我的项目</h2>
+<a href="twproject_post.php?action=add" style="text-align:right;">添加新项目</a></td></tr>
 <tr class="tr2">
 <td class="tal y-style">项目优先级</td>
 <td class="tal y-style">项目状态</td>
@@ -88,6 +91,7 @@ print <<<EOT
 <td class="tal y-style">计划开始时间</td>
 <td class="tal y-style">实际开始时间</td>
 <td class="tal y-style">创建时间</td>
+<td class="tal y-style">wiki</td>
 </tr>
 <!--
 EOT;
@@ -130,10 +134,24 @@ if( $project[create_time] > 0 ){
 }
 print <<<EOT
 -->
-<td ><a href="twproject.php?action=detail&tid=$project[pid]" target="_blank">$project[projectname]</a></td>
+<td >
+<span class="forumslink s5">	
+<a href="twproject.php?action=detail&pid=$project[pid]">$project[projectname]</a></td>
+</span>
 <td class="tal y-style">$plan_start_time</td>
 <td class="tal y-style">$real_start_time</td>
 <td class="tal y-style">$create_time</td>
+<!--
+EOT;
+$echowiki = "没有wiki";
+if( strlen($project[wiki]) > 0){
+	$echowiki = "<span class='forumslink s5'><a href='$project[wiki]' target='_blank'>访问wiki</a></span>";
+}
+print <<<EOT
+-->
+<td class="tal y-style">
+$echowiki	
+</td>
 </tr>
 <!--
 EOT;
